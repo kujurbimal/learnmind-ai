@@ -1,0 +1,84 @@
+/* animations.css — Keyframes & motion classes */
+
+/* ── KEYFRAMES ── */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scrollTutors {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 24px rgba(79, 110, 247, 0.3); }
+  50%       { box-shadow: 0 0 40px rgba(79, 110, 247, 0.55); }
+}
+
+/* ── HERO STAGGER FADE ── */
+.fade-up {
+  opacity: 0;
+  animation: fadeUp 0.7s ease forwards;
+  animation-delay: var(--delay, 0s);
+}
+
+/* ── TUTOR SCROLL ── */
+.tutor-scroll {
+  animation: scrollTutors 36s linear infinite;
+}
+
+.tutor-strip:hover .tutor-scroll {
+  animation-play-state: paused;
+}
+
+/* ── SCROLL REVEAL ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger reveal children */
+.reveal:nth-child(2) { transition-delay: 0.1s; }
+.reveal:nth-child(3) { transition-delay: 0.2s; }
+.reveal:nth-child(4) { transition-delay: 0.3s; }
+
+/* ── COUNTER POP ── */
+@keyframes countPop {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+
+.stat-num.popped {
+  animation: countPop 0.3s ease;
+}
+
+/* ── CTA PULSE ── */
+.btn-primary {
+  animation: pulseGlow 3s ease-in-out infinite;
+}
+
+.btn-primary:hover {
+  animation: none;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .fade-up           { animation: none; opacity: 1; }
+  .tutor-scroll      { animation: none; }
+  .reveal            { opacity: 1; transform: none; transition: none; }
+  .btn-primary       { animation: none; }
+}
