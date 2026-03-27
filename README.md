@@ -147,3 +147,5 @@ async function submitWaitlist() {
 ## 📄 License
 
 MIT — free to use, modify, and deploy commercially.
+
+**Content Pipeline: Open tools/ai-pipeline.html locally in your browser (or via GitHub Pages at /tools/ai-pipeline.html) to regenerate all **site content using Claude AI. Export the result as index.html and commit.
