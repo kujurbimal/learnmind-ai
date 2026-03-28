@@ -1,0 +1,48 @@
+/* variables.css — Design tokens */
+:root {
+  /* Colors */
+  --color-navy:    #0b0f2a;
+  --color-indigo:  #1a1f4e;
+  --color-electric:#4f6ef7;
+  --color-gold:    #f5c842;
+  --color-cream:   #faf7f0;
+  --color-text:    #e8e4d8;
+  --color-muted:   #8a8aaa;
+
+  /* Surfaces */
+  --color-card:    rgba(255, 255, 255, 0.04);
+  --color-border:  rgba(255, 255, 255, 0.08);
+
+  /* Typography */
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body:    'DM Sans', system-ui, sans-serif;
+
+  /* Spacing */
+  --spacing-xs:  0.5rem;
+  --spacing-sm:  1rem;
+  --spacing-md:  1.5rem;
+  --spacing-lg:  2.5rem;
+  --spacing-xl:  4rem;
+  --spacing-2xl: 6rem;
+
+  /* Border radius */
+  --radius-sm:   8px;
+  --radius-md:   16px;
+  --radius-lg:   24px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-electric: 0 0 30px rgba(79, 110, 247, 0.3);
+  --shadow-electric-hover: 0 8px 30px rgba(79, 110, 247, 0.5);
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.2);
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.25s ease;
+  --transition-slow: 0.4s ease;
+
+  /* Layout */
+  --max-width: 1200px;
+  --section-padding: 6rem 5%;
+  --nav-height: 72px;
+}

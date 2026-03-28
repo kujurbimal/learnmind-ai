@@ -1,0 +1,154 @@
+name: AI Content Pipeline
+
+on:
+  # Run automatically every Monday at 9am UTC
+  schedule:
+    - cron: '0 9 * * 1'
+
+  # Allow manual trigger from GitHub UI with custom options
+  workflow_dispatch:
+    inputs:
+      brand:
+        description: 'Brand name'
+        required: false
+        default: 'LearnMind.AI'
+      audience:
+        description: 'Target audience'
+        required: false
+        default: 'K-12 students and parents'
+      tone:
+        description: 'Copy tone'
+        required: false
+        default: 'motivational and urgent'
+      sections:
+        description: 'Sections to regenerate (comma-separated or "all")'
+        required: false
+        default: 'all'
+
+  # Also trigger on push to content-config.json
+  push:
+    paths:
+      - 'content-config.json'
+
+jobs:
+  generate-content:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: |
+          cd scripts
+          npm install
+
+      - name: Load content config
+        id: config
+        run: |
+          # Use workflow_dispatch inputs OR content-config.json OR defaults
+          if [ -f content-config.json ]; then
+            echo "Using content-config.json"
+            cat content-config.json
+          fi
+
+          BRAND="${{ github.event.inputs.brand || '' }}"
+          AUDIENCE="${{ github.event.inputs.audience || '' }}"
+          TONE="${{ github.event.inputs.tone || '' }}"
+          SECTIONS="${{ github.event.inputs.sections || 'all' }}"
+
+          # Fall back to config file values if inputs are empty
+          if [ -f content-config.json ] && [ -z "$BRAND" ]; then
+            BRAND=$(node -e "const c=require('./content-config.json'); console.log(c.brand||'LearnMind.AI')")
+            AUDIENCE=$(node -e "const c=require('./content-config.json'); console.log(c.audience||'K-12 students and parents')")
+            TONE=$(node -e "const c=require('./content-config.json'); console.log(c.tone||'motivational and urgent')")
+          fi
+
+          # Final defaults
+          BRAND="${BRAND:-LearnMind.AI}"
+          AUDIENCE="${AUDIENCE:-K-12 students and parents}"
+          TONE="${TONE:-motivational and urgent}"
+
+          echo "brand=$BRAND" >> $GITHUB_OUTPUT
+          echo "audience=$AUDIENCE" >> $GITHUB_OUTPUT
+          echo "tone=$TONE" >> $GITHUB_OUTPUT
+          echo "sections=$SECTIONS" >> $GITHUB_OUTPUT
+
+          echo "━━━ Config ━━━"
+          echo "Brand:    $BRAND"
+          echo "Audience: $AUDIENCE"
+          echo "Tone:     $TONE"
+          echo "Sections: $SECTIONS"
+
+      - name: Run AI content generation
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          BRAND: ${{ steps.config.outputs.brand }}
+          AUDIENCE: ${{ steps.config.outputs.audience }}
+          TONE: ${{ steps.config.outputs.tone }}
+          SECTIONS: ${{ steps.config.outputs.sections }}
+        run: |
+          cd scripts
+          node generate.js
+
+      - name: Verify output
+        run: |
+          if [ ! -f index.html ]; then
+            echo "ERROR: index.html was not generated"
+            exit 1
+          fi
+          SIZE=$(wc -c < index.html)
+          echo "✓ index.html generated ($SIZE bytes)"
+
+          if [ -f content/generated.json ]; then
+            echo "✓ Generated content saved to content/generated.json"
+          fi
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "ai-pipeline[bot]@learnmind.ai"
+          git config --local user.name "LearnMind AI Pipeline"
+
+          git add index.html
+          git add content/ 2>/dev/null || true
+
+          # Only commit if there are actual changes
+          if git diff --staged --quiet; then
+            echo "No content changes detected — skipping commit"
+          else
+            TIMESTAMP=$(date -u '+%Y-%m-%d %H:%M UTC')
+            TRIGGER="${{ github.event_name }}"
+            git commit -m "🤖 AI pipeline: regenerate content [$TIMESTAMP]
+
+Trigger: $TRIGGER
+Brand: ${{ steps.config.outputs.brand }}
+Audience: ${{ steps.config.outputs.audience }}
+Tone: ${{ steps.config.outputs.tone }}
+Sections: ${{ steps.config.outputs.sections }}"
+
+            git push
+            echo "✓ Changes committed and pushed"
+          fi
+
+      - name: Summary
+        run: |
+          echo "## AI Pipeline Complete ✅" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Setting | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|---------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Brand | ${{ steps.config.outputs.brand }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Audience | ${{ steps.config.outputs.audience }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Tone | ${{ steps.config.outputs.tone }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Sections | ${{ steps.config.outputs.sections }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Triggered by | ${{ github.event_name }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "🌐 Live site: https://${{ github.repository_owner }}.github.io/learnmind-ai" >> $GITHUB_STEP_SUMMARY

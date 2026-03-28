@@ -1,0 +1,17 @@
+{
+  "name": "learnmind-ai-pipeline",
+  "version": "1.0.0",
+  "description": "AI content generation pipeline for LearnMind.AI",
+  "main": "generate.js",
+  "scripts": {
+    "generate": "node generate.js",
+    "generate:hero": "SECTIONS=hero node generate.js",
+    "generate:all": "SECTIONS=all node generate.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.24.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

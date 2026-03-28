@@ -1,0 +1,20 @@
+# Dependencies
+scripts/node_modules/
+node_modules/
+
+# Environment (never commit API keys)
+.env
+.env.local
+.env*.local
+scripts/.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Generated content is intentionally tracked (committed by the pipeline)
+# content/*.json  ← DO NOT ignore — pipeline commits these
