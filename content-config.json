@@ -2,14 +2,5 @@
   "brand": "LearnMind.AI",
   "audience": "K-12 students and parents",
   "tone": "motivational and urgent",
-  "sections": "all",
-
-  "_comment": "━━━ HOW TO USE ━━━",
-  "_brand": "Your product/company name",
-  "_audience": "Who you're targeting — this shapes all copy",
-  "_tone": "motivational and urgent | friendly and approachable | professional and authoritative | playful and energetic",
-  "_sections": "all — OR comma-separated section IDs to regenerate only specific ones",
-  "_section_ids": "hero, tutors, stats, products, subjects, how, pricing, testimonials, cta",
-
-  "_trigger": "Commit any change to this file to auto-trigger the GitHub Actions pipeline"
+  "sections": "all"
 }
