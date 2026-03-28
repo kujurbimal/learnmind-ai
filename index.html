@@ -25,7 +25,6 @@
     <ul class="nav-links">
       <li><a href="#products">Products</a></li>
       <li><a href="#subjects">Subjects</a></li>
-      <li><a href="#how">How It Works</a></li>
       <li><a href="#pricing">Pricing</a></li>
       <li><a href="#testimonials">Reviews</a></li>
     </ul>
@@ -38,10 +37,9 @@
   <!-- Mobile Nav Drawer -->
   <div class="mobile-nav" id="mobileNav">
     <ul>
-      <li><a href="#products"     onclick="closeMobileNav()">Products</a></li>
-      <li><a href="#subjects"     onclick="closeMobileNav()">Subjects</a></li>
-      <li><a href="#how"          onclick="closeMobileNav()">How It Works</a></li>
-      <li><a href="#pricing"      onclick="closeMobileNav()">Pricing</a></li>
+      <li><a href="#products" onclick="closeMobileNav()">Products</a></li>
+      <li><a href="#subjects" onclick="closeMobileNav()">Subjects</a></li>
+      <li><a href="#pricing" onclick="closeMobileNav()">Pricing</a></li>
       <li><a href="#testimonials" onclick="closeMobileNav()">Reviews</a></li>
     </ul>
     <button class="btn btn-primary" onclick="openWaitlist()">Get Started Free</button>
@@ -52,22 +50,21 @@
     <div class="hero-glow"></div>
     <div class="hero-content">
       <div class="badge fade-up" style="--delay: 0s">🚀 AI-Powered K-12 Education</div>
-      <h1 class="fade-up" style="--delay: 0.1s">
-        Learn 10x Faster<br>with <em>AI Tutors</em>
-      </h1>
+      <h1 class="fade-up" style="--delay: 0.1s">Learn 10x Faster<br>with <em>AI Tutors</em></h1>
       <p class="hero-sub fade-up" style="--delay: 0.2s">
         Personalized courses taught by AI versions of history's greatest minds.
         Achieve a 1600 SAT, 4.0 GPA, and 5's on every AP exam.
       </p>
       <div class="hero-actions fade-up" style="--delay: 0.3s">
         <button class="btn btn-primary btn-lg" onclick="openWaitlist()">Join Free Waitlist →</button>
-        <button class="btn btn-ghost btn-lg"   onclick="openDemo()">Watch Demo</button>
+        <button class="btn btn-ghost btn-lg" onclick="openDemo()">Watch Demo</button>
       </div>
     </div>
 
-    <!-- Infinite-scroll tutor chips — JS clones set for seamless loop -->
+    <!-- Infinite scroll tutor chips -->
     <div class="tutor-strip fade-up" style="--delay: 0.45s">
       <div class="tutor-scroll" id="tutorScroll">
+        <!-- JS will clone these for infinite loop -->
         <div class="tutor-chip"><span class="avatar">AE</span> Albert Einstein</div>
         <div class="tutor-chip"><span class="avatar">MC</span> Marie Curie</div>
         <div class="tutor-chip"><span class="avatar">GW</span> George Washington</div>
@@ -84,7 +81,7 @@
     </div>
   </section>
 
-  <!-- ── STATS BAR ── -->
+  <!-- ── STATS ── -->
   <div class="stats-bar">
     <div class="stat">
       <div class="stat-num" data-count="10" data-suffix="×">0×</div>
@@ -108,7 +105,6 @@
       <p class="section-sub">Three distinct apps built for different grade levels — each designed to meet students exactly where they are.</p>
     </div>
     <div class="products-grid">
-
       <div class="product-card product-blue">
         <span class="product-tag tag-blue">2nd – 6th Grade</span>
         <div class="product-name">TeachTales</div>
@@ -116,7 +112,6 @@
         <p class="product-desc">Story-driven AI learning that makes young students fall in love with history, science, and reading through interactive adventures with famous figures.</p>
         <a href="#" class="product-link" onclick="openWaitlist(); return false;">Join Waitlist →</a>
       </div>
-
       <div class="product-card product-gold">
         <span class="product-tag tag-gold">3rd – 8th Grade</span>
         <div class="product-name">Athena Jr.</div>
@@ -124,7 +119,6 @@
         <p class="product-desc">Adaptive AI curriculum that accelerates middle schoolers through core subjects with personalized pacing, instant feedback, and real-time progress tracking.</p>
         <a href="#" class="product-link" onclick="openWaitlist(); return false;">Join Waitlist →</a>
       </div>
-
       <div class="product-card product-purple">
         <span class="product-tag tag-purple">9th – 12th Grade</span>
         <div class="product-name">Athena</div>
@@ -132,7 +126,6 @@
         <p class="product-desc">Master every AP exam and dominate the SAT with AI tutors who adapt to your weaknesses, give bite-sized lessons, and keep you engaged with short-form delivery.</p>
         <a href="#" class="product-link" onclick="openWaitlist(); return false;">Join Waitlist →</a>
       </div>
-
     </div>
   </section>
 
@@ -178,49 +171,42 @@
   </section>
 
   <!-- ── HOW IT WORKS ── -->
-  <section class="section how-section" id="how">
+  <section class="section how-section">
     <div class="section-header">
       <span class="section-label">How It Works</span>
       <h2 class="section-title">The AI education model that actually <em>works</em></h2>
     </div>
     <div class="steps-grid">
-
       <div class="step reveal">
         <div class="step-num">01</div>
         <div class="step-title">Personalized Assessment</div>
         <p class="step-desc">Our AI identifies exactly where your child is and builds a custom curriculum around their strengths and gaps — no wasted time on what they already know.</p>
       </div>
-
       <div class="step reveal">
         <div class="step-num">02</div>
         <div class="step-title">Learn from Legends</div>
         <p class="step-desc">AI-powered personas of history's greatest thinkers teach lessons in engaging, conversational short-form videos that hold attention far better than textbooks.</p>
       </div>
-
       <div class="step reveal">
         <div class="step-num">03</div>
         <div class="step-title">Active Practice &amp; Feedback</div>
         <p class="step-desc">Quizzes, guided problems, and instant AI feedback after every lesson close knowledge gaps in real-time and reinforce long-term retention.</p>
       </div>
-
       <div class="step reveal">
         <div class="step-num">04</div>
         <div class="step-title">Parent Dashboard</div>
         <p class="step-desc">Full visibility into your child's progress, time on task, mastery by topic, and projected exam outcomes — so you're never in the dark.</p>
       </div>
-
     </div>
   </section>
 
   <!-- ── PRICING ── -->
   <section class="section pricing-section" id="pricing">
-    <div class="section-header" style="text-align: center;">
+    <div class="section-header" style="text-align:center">
       <span class="section-label">Pricing</span>
-      <h2 class="section-title" style="margin: 0 auto;">Simple, transparent <em>pricing</em></h2>
-      <p class="section-sub" style="margin: 0.75rem auto 0;">No hidden fees. Cancel anytime.</p>
+      <h2 class="section-title" style="margin:0 auto">Simple, transparent <em>pricing</em></h2>
     </div>
     <div class="pricing-grid">
-
       <div class="plan">
         <div class="plan-name">Basic</div>
         <div class="plan-price">Free<span>/mo</span></div>
@@ -262,7 +248,6 @@
         </ul>
         <button class="btn btn-outline btn-full" onclick="openWaitlist()">Get Family Plan</button>
       </div>
-
     </div>
   </section>
 
@@ -273,10 +258,9 @@
       <h2 class="section-title">Students and parents <em>love</em> it</h2>
     </div>
     <div class="testimonials-grid">
-
       <div class="testimonial reveal">
         <div class="stars">★★★★★</div>
-        <p class="testimonial-text">"I took 7 AP classes in high school and wish I had something like this. The Einstein AI tutor explained physics in a way my actual teacher never could."</p>
+        <p class="testimonial-text">"I took 7 AP classes in high school and I wish I had something like this. The Einstein AI tutor explained physics in a way my actual teacher never could."</p>
         <div class="testimonial-author">
           <div class="author-avatar">W</div>
           <div>
@@ -285,7 +269,6 @@
           </div>
         </div>
       </div>
-
       <div class="testimonial reveal">
         <div class="stars">★★★★★</div>
         <p class="testimonial-text">"My daughter went from a C in history to a 5 on the AP exam in 3 months. The short-form video format keeps her watching instead of scrolling."</p>
@@ -297,10 +280,9 @@
           </div>
         </div>
       </div>
-
       <div class="testimonial reveal">
         <div class="stars">★★★★★</div>
-        <p class="testimonial-text">"The SAT prep module is unreal. Went from 1280 to 1540 in two months. The AI found exactly which math concepts I was weak on and drilled them."</p>
+        <p class="testimonial-text">"The SAT prep module is unreal. Went from 1280 to 1540 in two months. The AI figured out exactly which math concepts I was weak on and drilled them."</p>
         <div class="testimonial-author">
           <div class="author-avatar">J</div>
           <div>
@@ -309,7 +291,6 @@
           </div>
         </div>
       </div>
-
     </div>
   </section>
 
@@ -341,7 +322,7 @@
       <h3 class="modal-title">Join the Waitlist</h3>
       <p class="modal-sub">Be first to access AI-powered K-12 learning. We'll email you when your spot is ready.</p>
       <div class="modal-form">
-        <input type="text"  placeholder="Your name"     id="waitlistName"  />
+        <input type="text" placeholder="Your name" id="waitlistName" />
         <input type="email" placeholder="Email address" id="waitlistEmail" />
         <select id="waitlistGrade">
           <option value="">Select grade level</option>
