@@ -32,6 +32,11 @@ jobs:
       contents: write
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      BRAND: ${{ inputs.brand || 'LearnMind.AI' }}
+      AUDIENCE: ${{ inputs.audience || 'K-12 students and parents' }}
+      TONE: ${{ inputs.tone || 'motivational and urgent' }}
+      SECTIONS: ${{ inputs.sections || 'all' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -42,14 +47,20 @@ jobs:
       - name: Install dependencies
         run: cd scripts && npm install
 
+      - name: Debug environment
+        run: |
+          echo "BRAND: $BRAND"
+          echo "AUDIENCE: $AUDIENCE"
+          echo "TONE: $TONE"
+          echo "SECTIONS: $SECTIONS"
+          if [ -z "$ANTHROPIC_API_KEY" ]; then
+            echo "ERROR: ANTHROPIC_API_KEY is empty!"
+          else
+            echo "API KEY: present (ends in ...${ANTHROPIC_API_KEY: -4})"
+          fi
+
       - name: Generate content
         run: cd scripts && node generate.js
-        env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          BRAND: ${{ inputs.brand }}
-          AUDIENCE: ${{ inputs.audience }}
-          TONE: ${{ inputs.tone }}
-          SECTIONS: ${{ inputs.sections }}
 
       - name: Commit and push
         run: |
