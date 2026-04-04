@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>LearnMind.AI — Firebase Setup</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0b0f2a;--electric:#4f6ef7;--gold:#f5c842;--green:#22c55e;--red:#f87171;
+  --text:#e8e4d8;--muted:#8a8aaa;--border:rgba(255,255,255,0.08);--card:rgba(255,255,255,0.05);
+  --font-display:'Fraunces',serif;--font-body:'DM Sans',sans-serif;--font-mono:'DM Mono',monospace;
+}
+body{font-family:var(--font-body);background:var(--navy);color:var(--text);min-height:100vh;
+  display:flex;align-items:flex-start;justify-content:center;padding:2rem 1rem;
+  background-image:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(79,110,247,.12) 0%,transparent 60%)}
+
+.card{width:100%;max-width:620px}
+
+.logo{font-family:var(--font-display);font-size:1.6rem;font-weight:900;color:#fff;margin-bottom:.2rem}
+.logo span{color:var(--gold)}
+.subtitle{color:var(--muted);font-size:.85rem;margin-bottom:2rem}
+
+.status-bar{display:flex;align-items:center;gap:.6rem;padding:.7rem 1rem;border-radius:10px;font-size:.82rem;font-weight:600;margin-bottom:1.5rem;border:1px solid}
+.status-bar.idle{background:rgba(138,138,170,.08);border-color:rgba(138,138,170,.2);color:var(--muted)}
+.status-bar.ok{background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.3);color:var(--green)}
+.status-bar.err{background:rgba(248,113,113,.08);border-color:rgba(248,113,113,.3);color:var(--red)}
+.status-dot{width:8px;height:8px;border-radius:50%;background:currentColor;flex-shrink:0}
+
+.section{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.5rem;margin-bottom:1.2rem}
+.section-title{font-weight:700;font-size:1rem;color:#fff;margin-bottom:.3rem;display:flex;align-items:center;gap:.5rem}
+.section-desc{color:var(--muted);font-size:.8rem;line-height:1.5;margin-bottom:1.2rem}
+
+.form-group{margin-bottom:.9rem}
+.label{font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.35rem;display:flex;align-items:center;justify-content:space-between}
+.label span{color:var(--red);font-size:.65rem}
+.input{width:100%;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:10px;padding:.7rem 1rem;color:#fff;font-family:var(--font-mono);font-size:.85rem;outline:none;transition:border-color .2s}
+.input:focus{border-color:rgba(79,110,247,.5);background:rgba(255,255,255,.08)}
+.input::placeholder{color:rgba(138,138,170,.5);font-family:var(--font-body)}
+.input.filled{border-color:rgba(34,197,94,.3)}
+
+.row{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+
+.hint{font-size:.72rem;color:var(--muted);margin-top:.3rem;font-style:italic}
+
+.btn{width:100%;padding:.85rem;border-radius:10px;font-family:var(--font-body);font-size:.95rem;font-weight:700;cursor:pointer;border:none;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:.5rem}
+.btn-save{background:var(--electric);color:#fff;box-shadow:0 0 24px rgba(79,110,247,.3);margin-bottom:.8rem}
+.btn-save:hover:not(:disabled){filter:brightness(1.1);transform:translateY(-1px)}
+.btn-save:disabled{opacity:.5;cursor:not-allowed}
+.btn-test{background:rgba(255,255,255,.05);color:var(--text);border:1px solid var(--border)}
+.btn-test:hover{background:rgba(255,255,255,.1)}
+
+.success-box{background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.25);border-radius:12px;padding:1.2rem 1.5rem;margin-bottom:1.2rem;display:none}
+.success-box.show{display:block}
+.success-title{font-weight:700;color:var(--green);font-size:1rem;margin-bottom:.4rem}
+.success-desc{color:var(--text);font-size:.85rem;line-height:1.6}
+.success-link{display:inline-block;margin-top:.8rem;background:var(--electric);color:#fff;border-radius:8px;padding:.5rem 1rem;font-size:.85rem;font-weight:600;text-decoration:none;transition:all .2s}
+.success-link:hover{filter:brightness(1.1)}
+
+.steps{counter-reset:step;margin-bottom:1.5rem}
+.step{display:flex;gap:.8rem;align-items:flex-start;margin-bottom:.8rem}
+.step-num{width:22px;height:22px;border-radius:50%;background:rgba(79,110,247,.2);border:1px solid rgba(79,110,247,.4);display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:700;color:var(--electric);flex-shrink:0;margin-top:.1rem}
+.step-text{font-size:.83rem;color:var(--text);line-height:1.5}
+.step-text strong{color:#fff}
+.step-text code{font-family:var(--font-mono);font-size:.78rem;background:rgba(255,255,255,.08);padding:.1rem .4rem;border-radius:4px;color:var(--gold)}
+
+.divider{border:none;border-top:1px solid var(--border);margin:1.5rem 0}
+
+.toast{position:fixed;bottom:2rem;right:2rem;background:#1e2448;border:1px solid rgba(79,110,247,.4);border-radius:12px;padding:.9rem 1.4rem;color:#fff;font-size:.88rem;font-weight:500;z-index:1000;transform:translateY(80px);opacity:0;transition:all .3s;max-width:320px}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.ok{border-color:rgba(34,197,94,.4);background:rgba(34,197,94,.06)}
+.toast.err{border-color:rgba(248,113,113,.4);background:rgba(248,113,113,.06)}
+
+@media(max-width:500px){.row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="card">
+
+  <div class="logo">Learn<span>Mind</span>.AI</div>
+  <p class="subtitle">Firebase Setup — enter your credentials below to connect</p>
+
+  <div class="status-bar idle" id="statusBar">
+    <div class="status-dot"></div>
+    <span id="statusText">Not connected — fill in your Firebase config below</span>
+  </div>
+
+  <!-- SUCCESS BOX -->
+  <div class="success-box" id="successBox">
+    <div class="success-title">🔥 Firebase Connected!</div>
+    <div class="success-desc">Your config is saved. Admin account created. You can now sign in to the Admin Portal and start uploading materials.</div>
+    <a class="success-link" href="admin-portal.html">→ Go to Admin Portal</a>
+  </div>
+
+  <!-- HOW TO GET CONFIG -->
+  <div class="section">
+    <div class="section-title">📋 Where to find your Firebase Config</div>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-text">Go to <strong>console.firebase.google.com</strong> → open your project</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-text">Click the <strong>⚙️ gear icon</strong> (top left) → <strong>Project settings</strong></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-text">Scroll down to <strong>"Your apps"</strong> → click your web app <code>&lt;/&gt;</code></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-text">Select <strong>"Config"</strong> radio button → copy each value below</div></div>
+    </div>
+  </div>
+
+  <!-- FIREBASE CONFIG FORM -->
+  <div class="section">
+    <div class="section-title">🔑 Firebase Configuration</div>
+    <p class="section-desc">Copy each value from your firebaseConfig object in Firebase console</p>
+
+    <div class="form-group">
+      <div class="label">API Key <span>required</span></div>
+      <input class="input" id="fApiKey" placeholder="AIzaSyXXXXXXXXXXXXXXXXXXXXXXX" oninput="markFilled(this)"/>
+      <div class="hint">Starts with "AIzaSy..."</div>
+    </div>
+
+    <div class="row">
+      <div class="form-group">
+        <div class="label">Project ID <span>required</span></div>
+        <input class="input" id="fProjectId" placeholder="learnmind-ai-12345" oninput="markFilled(this);autoFill()"/>
+        <div class="hint">Found in firebaseConfig</div>
+      </div>
+      <div class="form-group">
+        <div class="label">Auth Domain</div>
+        <input class="input" id="fAuthDomain" placeholder="auto-filled from Project ID" oninput="markFilled(this)"/>
+        <div class="hint">Auto-filled when you type Project ID</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="label">Storage Bucket <span>required</span></div>
+      <input class="input" id="fBucket" placeholder="learnmind-ai-12345.appspot.com" oninput="markFilled(this)"/>
+      <div class="hint">Auto-filled when you type Project ID</div>
+    </div>
+
+    <div class="row">
+      <div class="form-group">
+        <div class="label">Messaging Sender ID</div>
+        <input class="input" id="fSenderId" placeholder="123456789012" oninput="markFilled(this)"/>
+      </div>
+      <div class="form-group">
+        <div class="label">App ID <span>required</span></div>
+        <input class="input" id="fAppId" placeholder="1:123456:web:abc123" oninput="markFilled(this)"/>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMIN ACCOUNT -->
+  <div class="section">
+    <div class="section-title">🔐 Admin Account</div>
+    <p class="section-desc">Set the email and password you will use to log in to the Admin Portal</p>
+    <div class="row">
+      <div class="form-group">
+        <div class="label">Admin Email <span>required</span></div>
+        <input class="input" id="fAdminEmail" type="email" placeholder="admin@learnmind.ai" value="admin@learnmind.ai" oninput="markFilled(this)"/>
+      </div>
+      <div class="form-group">
+        <div class="label">Admin Password <span>required</span></div>
+        <input class="input" id="fAdminPass" type="password" placeholder="Min 8 characters" oninput="markFilled(this)"/>
+        <div class="hint">You will use this to sign in</div>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn btn-save" id="saveBtn" onclick="saveAndConnect()">💾 Save & Connect Firebase</button>
+  <button class="btn btn-test" onclick="testOnly()">🔍 Test Connection Only</button>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp }                        from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore }                         from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getStorage }                           from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js';
+
+// Load saved config if exists
+window.addEventListener('DOMContentLoaded', () => {
+  const saved = getSaved();
+  if (saved) {
+    document.getElementById('fApiKey').value    = saved.apiKey    || '';
+    document.getElementById('fProjectId').value = saved.projectId || '';
+    document.getElementById('fAuthDomain').value= saved.authDomain|| '';
+    document.getElementById('fBucket').value    = saved.storageBucket || '';
+    document.getElementById('fSenderId').value  = saved.messagingSenderId || '';
+    document.getElementById('fAppId').value     = saved.appId     || '';
+    document.querySelectorAll('.input').forEach(el => { if (el.value) el.classList.add('filled'); });
+    setStatus('ok', '🔥 Firebase already configured — you can update values and re-save');
+  }
+  const admin = JSON.parse(localStorage.getItem('lm_admin')||'{}');
+  if (admin.email) document.getElementById('fAdminEmail').value = admin.email;
+});
+
+function getSaved() {
+  try { return JSON.parse(localStorage.getItem('lm_fb')||'null'); } catch { return null; }
+}
+
+function getFormValues() {
+  return {
+    apiKey:            document.getElementById('fApiKey').value.trim(),
+    authDomain:        document.getElementById('fAuthDomain').value.trim() || document.getElementById('fProjectId').value.trim() + '.firebaseapp.com',
+    projectId:         document.getElementById('fProjectId').value.trim(),
+    storageBucket:     document.getElementById('fBucket').value.trim() || document.getElementById('fProjectId').value.trim() + '.appspot.com',
+    messagingSenderId: document.getElementById('fSenderId').value.trim(),
+    appId:             document.getElementById('fAppId').value.trim(),
+  };
+}
+
+function validate() {
+  const cfg = getFormValues();
+  if (!cfg.apiKey)     { toast('Please enter your API Key', 'err'); return null; }
+  if (!cfg.projectId)  { toast('Please enter your Project ID', 'err'); return null; }
+  if (!cfg.appId)      { toast('Please enter your App ID', 'err'); return null; }
+  return cfg;
+}
+
+window.autoFill = function() {
+  const pid = document.getElementById('fProjectId').value.trim();
+  if (!pid) return;
+  const authEl   = document.getElementById('fAuthDomain');
+  const bucketEl = document.getElementById('fBucket');
+  if (!authEl.value)   { authEl.value   = pid + '.firebaseapp.com'; authEl.classList.add('filled'); }
+  if (!bucketEl.value) { bucketEl.value = pid + '.appspot.com';     bucketEl.classList.add('filled'); }
+};
+
+window.markFilled = function(el) {
+  el.classList.toggle('filled', el.value.trim().length > 0);
+};
+
+window.testOnly = async function() {
+  const cfg = validate(); if (!cfg) return;
+  setStatus('idle', 'Testing connection...');
+  try {
+    initializeApp(cfg, 'test-' + Date.now());
+    setStatus('ok', '✅ Config is valid! Click Save & Connect to finish setup.');
+    toast('Config looks good!', 'ok');
+  } catch(e) {
+    setStatus('err', '❌ Invalid config: ' + e.message);
+    toast('Invalid config: ' + e.message, 'err');
+  }
+};
+
+window.saveAndConnect = async function() {
+  const cfg   = validate(); if (!cfg) return;
+  const email = document.getElementById('fAdminEmail').value.trim();
+  const pass  = document.getElementById('fAdminPass').value.trim();
+  if (!email) { toast('Please enter admin email', 'err'); return; }
+  if (!pass || pass.length < 8) { toast('Password must be at least 8 characters', 'err'); return; }
+
+  const btn = document.getElementById('saveBtn');
+  btn.disabled = true;
+  btn.innerHTML = '⏳ Connecting to Firebase...';
+  setStatus('idle', 'Connecting...');
+
+  try {
+    // Init Firebase
+    const app   = initializeApp(cfg, 'setup-' + Date.now());
+    const auth  = getAuth(app);
+    getFirestore(app);
+    getStorage(app);
+
+    // Save config to localStorage
+    localStorage.setItem('lm_fb', JSON.stringify(cfg));
+    localStorage.setItem('lm_admin', JSON.stringify({ email, pass }));
+
+    // Create admin account
+    try {
+      await createUserWithEmailAndPassword(auth, email, pass);
+      toast('✅ Admin account created!', 'ok');
+    } catch(e) {
+      if (e.code === 'auth/email-already-in-use') {
+        toast('Admin account already exists — config saved!', 'ok');
+      } else {
+        throw e;
+      }
+    }
+
+    setStatus('ok', '🔥 Firebase connected! Config saved successfully.');
+    document.getElementById('successBox').classList.add('show');
+    btn.innerHTML = '✅ Connected Successfully!';
+
+  } catch(e) {
+    setStatus('err', '❌ Error: ' + e.message);
+    toast('Error: ' + e.message, 'err');
+    btn.disabled = false;
+    btn.innerHTML = '💾 Save & Connect Firebase';
+  }
+};
+
+function setStatus(type, msg) {
+  const bar = document.getElementById('statusBar');
+  bar.className = 'status-bar ' + type;
+  document.getElementById('statusText').textContent = msg;
+}
+
+let tt;
+window.toast = function(msg, type='') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast ' + type + ' show';
+  clearTimeout(tt);
+  tt = setTimeout(() => el.classList.remove('show'), 4000);
+};
+</script>
+</body>
+</html>
