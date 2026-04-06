@@ -7,6 +7,254 @@
       "all"
     ]
   },
-  "timestamp": "2026-03-28T11:23:40.197Z",
-  "sections": {}
+  "timestamp": "2026-04-06T10:14:47.356Z",
+  "sections": {
+    "hero": {
+      "badge": "AI-Powered Learning Revolution",
+      "headline_plain": "Transform Your Child's Academic Future with",
+      "headline_em": "Personalized AI Learning",
+      "subheadline": "Every student learns differently, and now AI can adapt to your child's unique learning style in real-time. Don't let your child fall behind when cutting-edge technology can unlock their full academic potential today.",
+      "cta_primary": "Start Free Trial Now",
+      "cta_secondary": "See How It Works"
+    },
+    "tutors": {
+      "tutors": [
+        {
+          "name": "Albert Einstein",
+          "initials": "AE",
+          "subject": "Physics"
+        },
+        {
+          "name": "Marie Curie",
+          "initials": "MC",
+          "subject": "Chemistry"
+        },
+        {
+          "name": "Leonardo da Vinci",
+          "initials": "LV",
+          "subject": "Art"
+        },
+        {
+          "name": "George Washington",
+          "initials": "GW",
+          "subject": "History"
+        },
+        {
+          "name": "Maya Angelou",
+          "initials": "MA",
+          "subject": "English Literature"
+        },
+        {
+          "name": "Galileo Galilei",
+          "initials": "GG",
+          "subject": "Astronomy"
+        },
+        {
+          "name": "Cleopatra VII",
+          "initials": "CV",
+          "subject": "Ancient History"
+        },
+        {
+          "name": "Charles Darwin",
+          "initials": "CD",
+          "subject": "Biology"
+        },
+        {
+          "name": "Benjamin Franklin",
+          "initials": "BF",
+          "subject": "Science"
+        },
+        {
+          "name": "Frida Kahlo",
+          "initials": "FK",
+          "subject": "Visual Arts"
+        },
+        {
+          "name": "Pythagoras",
+          "initials": "PY",
+          "subject": "Mathematics"
+        },
+        {
+          "name": "Wolfgang Amadeus Mozart",
+          "initials": "WM",
+          "subject": "Music"
+        }
+      ]
+    },
+    "stats": {
+      "stats": [
+        {
+          "number": "92%",
+          "label": "improvement in student test scores"
+        },
+        {
+          "number": "15min",
+          "label": "average daily study time needed"
+        },
+        {
+          "number": "100K+",
+          "label": "students actively learning"
+        }
+      ]
+    },
+    "products": {
+      "products": [
+        {
+          "tag": "K-5",
+          "name": "MindSpark Elementary",
+          "level": "Elementary School",
+          "description": "Transform your child's learning journey with AI-powered adventures that make math, reading, and science irresistibly fun! Don't let your young learner fall behind – unlock their full potential with personalized lessons that adapt to their unique pace and learning style.",
+          "color": "blue"
+        },
+        {
+          "tag": "6-8",
+          "name": "BrainBoost Middle",
+          "level": "Middle School",
+          "description": "Critical years demand exceptional tools – give your teen the AI advantage they need to master complex subjects and build unshakeable confidence! Every day without personalized learning support is a missed opportunity to excel in these pivotal academic years.",
+          "color": "gold"
+        },
+        {
+          "tag": "9-12",
+          "name": "FutureReady High",
+          "level": "High School",
+          "description": "College applications and career prospects are decided NOW – equip your student with AI tutoring that guarantees mastery of AP courses, SAT prep, and critical thinking skills! Time is running out to secure their competitive edge for university admission and future success.",
+          "color": "purple"
+        }
+      ]
+    },
+    "subjects": {
+      "subjects": [
+        {
+          "icon": "📚",
+          "name": "History",
+          "courses": "World History, American History, Ancient Civilizations"
+        },
+        {
+          "icon": "🔬",
+          "name": "Science",
+          "courses": "Biology, Chemistry, Physics"
+        },
+        {
+          "icon": "🧮",
+          "name": "Math",
+          "courses": "Algebra, Geometry, Calculus"
+        },
+        {
+          "icon": "📝",
+          "name": "English",
+          "courses": "Literature, Writing & Composition, Grammar & Vocabulary"
+        },
+        {
+          "icon": "🎨",
+          "name": "Humanities",
+          "courses": "Philosophy, Art History, Cultural Studies"
+        },
+        {
+          "icon": "🎯",
+          "name": "SAT Prep",
+          "courses": "SAT Math, SAT Reading & Writing, SAT Practice Tests"
+        }
+      ]
+    },
+    "how": {
+      "steps": [
+        {
+          "number": "01",
+          "title": "Instant AI Assessment",
+          "description": "Your child takes a quick 5-minute diagnostic that identifies their exact learning gaps and strengths across all subjects. Don't let another day pass with outdated teaching methods - discover their true potential NOW!"
+        },
+        {
+          "number": "02",
+          "title": "Personalized Learning Path",
+          "description": "Our AI creates a custom curriculum tailored specifically to your child's learning style, pace, and goals within minutes. Every second counts in your child's education - get their personalized roadmap to success TODAY!"
+        },
+        {
+          "number": "03",
+          "title": "Interactive AI Tutoring",
+          "description": "Your student engages with their personal AI tutor 24/7, getting instant feedback and adaptive lessons that evolve with their progress. Stop watching your child struggle with homework - give them the AI advantage that transforms learning into achievement!"
+        },
+        {
+          "number": "04",
+          "title": "Real-Time Progress Tracking",
+          "description": "Parents receive detailed insights and progress reports showing exactly how their child is advancing in real-time. Your child's academic future is being decided right now - take control with data-driven learning that guarantees results!"
+        }
+      ]
+    },
+    "pricing": {
+      "plans": [
+        {
+          "name": "Free",
+          "price": "Free",
+          "period": "",
+          "description": "Perfect for getting started with AI-powered learning",
+          "features": [
+            "Access to basic AI tutoring",
+            "5 homework help sessions per month",
+            "Progress tracking dashboard",
+            "Study reminders and scheduling"
+          ],
+          "cta": "Get Started Free",
+          "featured": false
+        },
+        {
+          "name": "Pro",
+          "price": "$29",
+          "period": "/mo",
+          "description": "Unlimited AI learning support for serious students",
+          "features": [
+            "Unlimited AI tutoring sessions",
+            "Personalized learning paths",
+            "Advanced progress analytics",
+            "Homework help with step-by-step explanations",
+            "Priority customer support",
+            "Exam preparation tools"
+          ],
+          "cta": "Start Pro Trial",
+          "featured": true
+        },
+        {
+          "name": "Family",
+          "price": "$49",
+          "period": "/mo",
+          "description": "Complete learning solution for multiple children",
+          "features": [
+            "Up to 5 student profiles",
+            "Parent dashboard with detailed insights",
+            "Unlimited AI tutoring for all children",
+            "Family progress reports and goal setting"
+          ],
+          "cta": "Choose Family Plan",
+          "featured": false
+        }
+      ]
+    },
+    "testimonials": {
+      "testimonials": [
+        {
+          "text": "My daughter was struggling with algebra and her grades had dropped to a C-. After using LearnMind.AI for just 6 weeks, she brought her math grade up to a B+ and actually enjoys solving equations now. The personalized learning path really helped her understand concepts at her own pace.",
+          "name": "Sarah Mitchell",
+          "role": "Parent of 8th grader",
+          "initial": "S"
+        },
+        {
+          "text": "I used to spend hours on homework and still felt confused about biology. LearnMind.AI's interactive lessons and instant feedback helped me raise my test scores from 72% to 89% this semester. The AI tutor explains things in ways that actually make sense to me.",
+          "name": "Marcus Chen",
+          "role": "10th Grade Student",
+          "initial": "M"
+        },
+        {
+          "text": "As a working mom, I couldn't always help my son with his reading comprehension homework. Since we started using LearnMind.AI three months ago, his reading level has improved by two grade levels and he's reading chapter books independently for the first time.",
+          "name": "Jennifer Rodriguez",
+          "role": "Parent of 3rd grader",
+          "initial": "J"
+        }
+      ]
+    },
+    "cta": {
+      "headline_plain": "Don't let your child fall behind - unlock their full",
+      "headline_em": "potential",
+      "subtext": "Join thousands of families already giving their students the AI-powered edge they need to excel. Every day you wait is another day of missed opportunities.",
+      "button_text": "Start Free Today"
+    }
+  }
 }

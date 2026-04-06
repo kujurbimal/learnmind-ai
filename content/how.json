@@ -1,0 +1,24 @@
+{
+  "steps": [
+    {
+      "number": "01",
+      "title": "Instant AI Assessment",
+      "description": "Your child takes a quick 5-minute diagnostic that identifies their exact learning gaps and strengths across all subjects. Don't let another day pass with outdated teaching methods - discover their true potential NOW!"
+    },
+    {
+      "number": "02",
+      "title": "Personalized Learning Path",
+      "description": "Our AI creates a custom curriculum tailored specifically to your child's learning style, pace, and goals within minutes. Every second counts in your child's education - get their personalized roadmap to success TODAY!"
+    },
+    {
+      "number": "03",
+      "title": "Interactive AI Tutoring",
+      "description": "Your student engages with their personal AI tutor 24/7, getting instant feedback and adaptive lessons that evolve with their progress. Stop watching your child struggle with homework - give them the AI advantage that transforms learning into achievement!"
+    },
+    {
+      "number": "04",
+      "title": "Real-Time Progress Tracking",
+      "description": "Parents receive detailed insights and progress reports showing exactly how their child is advancing in real-time. Your child's academic future is being decided right now - take control with data-driven learning that guarantees results!"
+    }
+  ]
+}

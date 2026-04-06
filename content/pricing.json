@@ -1,0 +1,48 @@
+{
+  "plans": [
+    {
+      "name": "Free",
+      "price": "Free",
+      "period": "",
+      "description": "Perfect for getting started with AI-powered learning",
+      "features": [
+        "Access to basic AI tutoring",
+        "5 homework help sessions per month",
+        "Progress tracking dashboard",
+        "Study reminders and scheduling"
+      ],
+      "cta": "Get Started Free",
+      "featured": false
+    },
+    {
+      "name": "Pro",
+      "price": "$29",
+      "period": "/mo",
+      "description": "Unlimited AI learning support for serious students",
+      "features": [
+        "Unlimited AI tutoring sessions",
+        "Personalized learning paths",
+        "Advanced progress analytics",
+        "Homework help with step-by-step explanations",
+        "Priority customer support",
+        "Exam preparation tools"
+      ],
+      "cta": "Start Pro Trial",
+      "featured": true
+    },
+    {
+      "name": "Family",
+      "price": "$49",
+      "period": "/mo",
+      "description": "Complete learning solution for multiple children",
+      "features": [
+        "Up to 5 student profiles",
+        "Parent dashboard with detailed insights",
+        "Unlimited AI tutoring for all children",
+        "Family progress reports and goal setting"
+      ],
+      "cta": "Choose Family Plan",
+      "featured": false
+    }
+  ]
+}

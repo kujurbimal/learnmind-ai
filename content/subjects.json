@@ -1,0 +1,34 @@
+{
+  "subjects": [
+    {
+      "icon": "📚",
+      "name": "History",
+      "courses": "World History, American History, Ancient Civilizations"
+    },
+    {
+      "icon": "🔬",
+      "name": "Science",
+      "courses": "Biology, Chemistry, Physics"
+    },
+    {
+      "icon": "🧮",
+      "name": "Math",
+      "courses": "Algebra, Geometry, Calculus"
+    },
+    {
+      "icon": "📝",
+      "name": "English",
+      "courses": "Literature, Writing & Composition, Grammar & Vocabulary"
+    },
+    {
+      "icon": "🎨",
+      "name": "Humanities",
+      "courses": "Philosophy, Art History, Cultural Studies"
+    },
+    {
+      "icon": "🎯",
+      "name": "SAT Prep",
+      "courses": "SAT Math, SAT Reading & Writing, SAT Practice Tests"
+    }
+  ]
+}

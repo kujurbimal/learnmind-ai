@@ -1,0 +1,64 @@
+{
+  "tutors": [
+    {
+      "name": "Albert Einstein",
+      "initials": "AE",
+      "subject": "Physics"
+    },
+    {
+      "name": "Marie Curie",
+      "initials": "MC",
+      "subject": "Chemistry"
+    },
+    {
+      "name": "Leonardo da Vinci",
+      "initials": "LV",
+      "subject": "Art"
+    },
+    {
+      "name": "George Washington",
+      "initials": "GW",
+      "subject": "History"
+    },
+    {
+      "name": "Maya Angelou",
+      "initials": "MA",
+      "subject": "English Literature"
+    },
+    {
+      "name": "Galileo Galilei",
+      "initials": "GG",
+      "subject": "Astronomy"
+    },
+    {
+      "name": "Cleopatra VII",
+      "initials": "CV",
+      "subject": "Ancient History"
+    },
+    {
+      "name": "Charles Darwin",
+      "initials": "CD",
+      "subject": "Biology"
+    },
+    {
+      "name": "Benjamin Franklin",
+      "initials": "BF",
+      "subject": "Science"
+    },
+    {
+      "name": "Frida Kahlo",
+      "initials": "FK",
+      "subject": "Visual Arts"
+    },
+    {
+      "name": "Pythagoras",
+      "initials": "PY",
+      "subject": "Mathematics"
+    },
+    {
+      "name": "Wolfgang Amadeus Mozart",
+      "initials": "WM",
+      "subject": "Music"
+    }
+  ]
+}

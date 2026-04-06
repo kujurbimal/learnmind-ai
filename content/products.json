@@ -1,0 +1,25 @@
+{
+  "products": [
+    {
+      "tag": "K-5",
+      "name": "MindSpark Elementary",
+      "level": "Elementary School",
+      "description": "Transform your child's learning journey with AI-powered adventures that make math, reading, and science irresistibly fun! Don't let your young learner fall behind – unlock their full potential with personalized lessons that adapt to their unique pace and learning style.",
+      "color": "blue"
+    },
+    {
+      "tag": "6-8",
+      "name": "BrainBoost Middle",
+      "level": "Middle School",
+      "description": "Critical years demand exceptional tools – give your teen the AI advantage they need to master complex subjects and build unshakeable confidence! Every day without personalized learning support is a missed opportunity to excel in these pivotal academic years.",
+      "color": "gold"
+    },
+    {
+      "tag": "9-12",
+      "name": "FutureReady High",
+      "level": "High School",
+      "description": "College applications and career prospects are decided NOW – equip your student with AI tutoring that guarantees mastery of AP courses, SAT prep, and critical thinking skills! Time is running out to secure their competitive edge for university admission and future success.",
+      "color": "purple"
+    }
+  ]
+}

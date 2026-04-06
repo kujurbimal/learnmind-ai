@@ -1,0 +1,22 @@
+{
+  "testimonials": [
+    {
+      "text": "My daughter was struggling with algebra and her grades had dropped to a C-. After using LearnMind.AI for just 6 weeks, she brought her math grade up to a B+ and actually enjoys solving equations now. The personalized learning path really helped her understand concepts at her own pace.",
+      "name": "Sarah Mitchell",
+      "role": "Parent of 8th grader",
+      "initial": "S"
+    },
+    {
+      "text": "I used to spend hours on homework and still felt confused about biology. LearnMind.AI's interactive lessons and instant feedback helped me raise my test scores from 72% to 89% this semester. The AI tutor explains things in ways that actually make sense to me.",
+      "name": "Marcus Chen",
+      "role": "10th Grade Student",
+      "initial": "M"
+    },
+    {
+      "text": "As a working mom, I couldn't always help my son with his reading comprehension homework. Since we started using LearnMind.AI three months ago, his reading level has improved by two grade levels and he's reading chapter books independently for the first time.",
+      "name": "Jennifer Rodriguez",
+      "role": "Parent of 3rd grader",
+      "initial": "J"
+    }
+  ]
+}
