@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>LearnMind.AI — Content Factory</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,300&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0b0f2a;--indigo:#131838;--electric:#4f6ef7;--gold:#f5c842;
+  --green:#22c55e;--red:#f87171;--purple:#a78bfa;--teal:#2dd4bf;--orange:#fb923c;
+  --text:#e8e4d8;--muted:#8a8aaa;--border:rgba(255,255,255,0.08);
+  --card:rgba(255,255,255,0.04);--card2:rgba(255,255,255,0.07);
+  --font-d:'Fraunces',serif;--font-b:'DM Sans',sans-serif;--font-m:'DM Mono',monospace;
+}
+body{font-family:var(--font-b);background:var(--navy);color:var(--text);min-height:100vh}
+
+/* LAYOUT */
+.app{display:grid;grid-template-columns:300px 1fr;min-height:100vh}
+.sidebar{background:var(--indigo);border-right:1px solid var(--border);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
+.main{overflow-y:auto}
+
+/* SIDEBAR */
+.sb-head{padding:1.5rem;border-bottom:1px solid var(--border)}
+.sb-logo{font-family:var(--font-d);font-size:1.2rem;font-weight:900;color:#fff}
+.sb-logo span{color:var(--gold)}
+.sb-sub{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--purple);margin-top:.2rem}
+
+.sb-section{padding:1rem 1.5rem;border-bottom:1px solid var(--border)}
+.sb-label{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem}
+
+/* CURRICULUM TREE */
+.tree{}
+.tree-subject{margin-bottom:.4rem}
+.tree-subject-header{display:flex;align-items:center;gap:.5rem;padding:.4rem .5rem;border-radius:6px;cursor:pointer;transition:background .2s;font-size:.82rem;font-weight:600;color:var(--text)}
+.tree-subject-header:hover{background:var(--card)}
+.tree-subject-header.active{background:rgba(79,110,247,.12);color:#fff}
+.tree-subject-icon{font-size:.85rem;width:18px;text-align:center;flex-shrink:0}
+.tree-subject-name{flex:1}
+.tree-subject-count{font-size:.65rem;color:var(--muted);font-family:var(--font-m)}
+.tree-chevron{font-size:.6rem;color:var(--muted);transition:transform .2s}
+.tree-subject.open .tree-chevron{transform:rotate(90deg)}
+.tree-lessons{display:none;padding-left:1.2rem;margin-top:.2rem}
+.tree-subject.open .tree-lessons{display:block}
+.tree-lesson{display:flex;align-items:center;gap:.5rem;padding:.3rem .5rem;border-radius:5px;cursor:pointer;font-size:.78rem;color:var(--muted);transition:all .2s;border-left:2px solid transparent}
+.tree-lesson:hover{color:var(--text);background:var(--card)}
+.tree-lesson.active{color:var(--electric);border-left-color:var(--electric);background:rgba(79,110,247,.06)}
+.tree-lesson.done{color:var(--green)}
+.tree-lesson.done::after{content:'✓';margin-left:auto;font-size:.65rem}
+.tree-lesson-dot{width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0}
+
+.sb-stats{padding:1rem 1.5rem;display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+.sb-stat{background:var(--card);border-radius:8px;padding:.5rem .6rem;text-align:center}
+.sb-stat-n{font-family:var(--font-d);font-size:1.1rem;font-weight:900;color:var(--gold)}
+.sb-stat-l{font-size:.62rem;color:var(--muted);margin-top:.1rem}
+
+.sb-run-btn{margin:1rem 1.5rem;background:var(--electric);color:#fff;border:none;padding:.8rem;border-radius:10px;font-family:var(--font-b);font-weight:700;font-size:.9rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:.5rem;width:calc(100% - 3rem)}
+.sb-run-btn:hover:not(:disabled){filter:brightness(1.1)}
+.sb-run-btn:disabled{opacity:.5;cursor:not-allowed}
+.sb-run-btn.running{background:rgba(79,110,247,.3);border:1px solid rgba(79,110,247,.5)}
+
+/* MAIN CONTENT */
+.main-head{padding:2rem 2.5rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.main-title{font-family:var(--font-d);font-size:1.8rem;font-weight:900;color:#fff;letter-spacing:-.03em}
+.main-title em{font-style:italic;color:var(--gold)}
+.main-desc{color:var(--muted);font-size:.85rem;margin-top:.3rem}
+.head-actions{display:flex;gap:.6rem;align-items:center}
+
+/* FB STATUS */
+.fb-pill{display:flex;align-items:center;gap:.4rem;font-size:.72rem;padding:.3rem .7rem;border-radius:100px;border:1px solid;font-weight:600}
+.fb-pill.ok{background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.3);color:var(--green)}
+.fb-pill.no{background:rgba(248,113,113,.08);border-color:rgba(248,113,113,.3);color:var(--red)}
+.fb-dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
+
+.btn-sm{padding:.4rem .9rem;border-radius:8px;font-size:.78rem;font-weight:600;font-family:var(--font-b);cursor:pointer;border:none;transition:all .2s}
+.btn-outline{background:transparent;color:var(--text);border:1px solid var(--border)}
+.btn-outline:hover{border-color:rgba(255,255,255,.3);color:#fff}
+.btn-gold{background:var(--gold);color:var(--navy)}
+.btn-gold:hover{filter:brightness(1.05)}
+
+/* CONTENT AREA */
+.content-area{padding:2rem 2.5rem}
+
+/* CONFIG PANEL */
+.config-panel{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.5rem;margin-bottom:2rem}
+.config-title{font-weight:700;color:#fff;font-size:.95rem;margin-bottom:1.2rem;display:flex;align-items:center;gap:.5rem}
+.config-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem}
+.cfg-group{display:flex;flex-direction:column;gap:.35rem}
+.cfg-label{font-size:.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.cfg-select,.cfg-input{background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:8px;padding:.55rem .8rem;color:#fff;font-family:var(--font-b);font-size:.85rem;outline:none;transition:border-color .2s}
+.cfg-select:focus,.cfg-input:focus{border-color:rgba(79,110,247,.5)}
+.cfg-select option{background:var(--navy)}
+
+/* LESSON WORKSPACE */
+.workspace{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:2rem}
+.ws-header{padding:1.2rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.8rem}
+.ws-lesson-info{}
+.ws-subject{font-size:.72rem;font-weight:700;color:var(--electric);text-transform:uppercase;letter-spacing:.06em}
+.ws-lesson-name{font-family:var(--font-d);font-size:1.3rem;font-weight:700;color:#fff;margin-top:.2rem}
+.ws-grade{font-size:.78rem;color:var(--muted);margin-top:.15rem}
+.ws-actions{display:flex;gap:.5rem;flex-wrap:wrap}
+
+/* CONTENT TYPE TABS */
+.content-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);padding:0 1.5rem;overflow-x:auto}
+.ctab{padding:.7rem 1rem;font-size:.8rem;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap;font-family:var(--font-b)}
+.ctab:hover{color:var(--text)}
+.ctab.active{color:#fff;border-bottom-color:var(--electric)}
+.ctab .ctab-status{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--muted);margin-left:.4rem;vertical-align:middle}
+.ctab .ctab-status.done{background:var(--green)}
+.ctab .ctab-status.running{background:var(--electric);animation:pulse 1s infinite}
+
+/* CONTENT PANELS */
+.content-panels{padding:1.5rem}
+.cpanel{display:none}
+.cpanel.active{display:block}
+
+/* GENERATED CONTENT CARD */
+.gen-card{background:rgba(0,0,0,.2);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:1rem}
+.gen-card-head{padding:.8rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.gen-card-title{font-size:.8rem;font-weight:600;color:#fff;display:flex;align-items:center;gap:.5rem}
+.gen-card-actions{display:flex;gap:.4rem}
+.icon-btn{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid var(--border);background:transparent;font-size:.7rem;color:var(--muted);transition:all .2s}
+.icon-btn:hover{background:rgba(255,255,255,.08);color:#fff}
+.icon-btn.upload{color:var(--electric);border-color:rgba(79,110,247,.3)}
+.icon-btn.upload:hover{background:rgba(79,110,247,.12)}
+.icon-btn.uploaded{color:var(--green);border-color:rgba(34,197,94,.3);background:rgba(34,197,94,.06)}
+.gen-card-body{padding:1rem;font-size:.82rem;line-height:1.7;color:var(--text);max-height:320px;overflow-y:auto;white-space:pre-wrap;font-family:var(--font-m)}
+.gen-card-body.prose{font-family:var(--font-b);white-space:normal}
+
+/* GENERATE BTN */
+.gen-btn{display:flex;align-items:center;gap:.5rem;background:var(--electric);color:#fff;border:none;padding:.55rem 1rem;border-radius:8px;font-family:var(--font-b);font-size:.8rem;font-weight:600;cursor:pointer;transition:all .2s}
+.gen-btn:hover:not(:disabled){filter:brightness(1.1)}
+.gen-btn:disabled{opacity:.4;cursor:not-allowed}
+.gen-btn.secondary{background:var(--card);color:var(--text);border:1px solid var(--border)}
+.gen-btn.secondary:hover:not(:disabled){background:var(--card2)}
+
+/* EMPTY STATE */
+.empty-gen{text-align:center;padding:3rem 2rem;color:var(--muted)}
+.empty-gen-icon{font-size:2.5rem;margin-bottom:.8rem;opacity:.4}
+.empty-gen-text{font-size:.85rem}
+
+/* UPLOAD PROGRESS */
+.upload-log{background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:12px;padding:1rem;margin-top:1rem;max-height:200px;overflow-y:auto;display:none}
+.upload-log.visible{display:block}
+.log-line{display:flex;align-items:flex-start;gap:.6rem;font-size:.75rem;padding:.2rem 0;font-family:var(--font-m)}
+.log-time{color:rgba(138,138,170,.5);flex-shrink:0;width:60px}
+.log-msg{flex:1}
+.log-msg.info{color:#7ca5f7}
+.log-msg.ok{color:var(--green)}
+.log-msg.err{color:var(--red)}
+.log-msg.warn{color:var(--gold)}
+
+/* PROGRESS RING */
+.progress-wrap{display:flex;align-items:center;gap:1.2rem;background:rgba(79,110,247,.06);border:1px solid rgba(79,110,247,.15);border-radius:12px;padding:1rem 1.2rem;margin-bottom:1.5rem;display:none}
+.progress-wrap.visible{display:flex}
+.progress-ring{width:44px;height:44px;flex-shrink:0}
+.progress-ring circle{fill:none;stroke-width:4}
+.progress-ring .bg{stroke:rgba(255,255,255,.08)}
+.progress-ring .fill{stroke:var(--electric);stroke-linecap:round;transition:stroke-dashoffset .4s ease;transform:rotate(-90deg);transform-origin:50% 50%}
+.progress-info{}
+.progress-label{font-size:.82rem;font-weight:600;color:#fff}
+.progress-sub{font-size:.75rem;color:var(--muted);margin-top:.2rem}
+
+/* CONTENT TYPE ICONS */
+.type-icon{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:7px;font-size:.85rem;flex-shrink:0}
+.ti-pdf{background:rgba(248,113,113,.15)}
+.ti-notes{background:rgba(79,110,247,.15)}
+.ti-slides{background:rgba(251,146,60,.15)}
+.ti-quiz{background:rgba(167,139,250,.15)}
+.ti-summary{background:rgba(45,212,191,.15)}
+.ti-video{background:rgba(248,113,113,.15)}
+.ti-image{background:rgba(34,197,94,.15)}
+.ti-doc{background:rgba(138,138,170,.15)}
+
+/* ALL JOBS TABLE */
+.jobs-table{width:100%;border-collapse:collapse}
+.jobs-table th{font-size:.68rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;padding:.5rem .8rem;text-align:left;border-bottom:1px solid var(--border)}
+.jobs-table td{padding:.6rem .8rem;font-size:.8rem;border-bottom:1px solid rgba(255,255,255,.04);vertical-align:middle}
+.jobs-table tr:hover td{background:rgba(255,255,255,.02)}
+.status-pill{display:inline-flex;align-items:center;gap:.3rem;font-size:.65rem;font-weight:700;padding:.18rem .5rem;border-radius:4px;text-transform:uppercase;letter-spacing:.04em}
+.sp-done{background:rgba(34,197,94,.1);color:var(--green)}
+.sp-running{background:rgba(79,110,247,.12);color:var(--electric);animation:pulse 1s infinite}
+.sp-pending{background:rgba(138,138,170,.1);color:var(--muted)}
+.sp-error{background:rgba(248,113,113,.1);color:var(--red)}
+
+/* TOAST */
+.toast{position:fixed;bottom:2rem;right:2rem;background:#1e2448;border:1px solid rgba(79,110,247,.4);border-radius:12px;padding:.9rem 1.4rem;color:#fff;font-size:.85rem;font-weight:500;z-index:1000;transform:translateY(80px);opacity:0;transition:all .3s;max-width:340px;line-height:1.4}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.ok{border-color:rgba(34,197,94,.4)}
+.toast.err{border-color:rgba(248,113,113,.4)}
+
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spin{animation:spin 1s linear infinite;display:inline-block}
+
+@media(max-width:900px){.app{grid-template-columns:1fr}.sidebar{position:static;height:auto}}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sb-head">
+    <div class="sb-logo">Learn<span>Mind</span>.AI</div>
+    <div class="sb-sub">🏭 Content Factory</div>
+  </div>
+
+  <div class="sb-section">
+    <div class="sb-label">Curriculum</div>
+    <div class="tree" id="curriculumTree"></div>
+  </div>
+
+  <div class="sb-stats">
+    <div class="sb-stat"><div class="sb-stat-n" id="statLessons">0</div><div class="sb-stat-l">Lessons</div></div>
+    <div class="sb-stat"><div class="sb-stat-n" id="statGenerated">0</div><div class="sb-stat-l">Generated</div></div>
+    <div class="sb-stat"><div class="sb-stat-n" id="statUploaded">0</div><div class="sb-stat-l">Uploaded</div></div>
+    <div class="sb-stat"><div class="sb-stat-n" id="statFiles">0</div><div class="sb-stat-l">Total Files</div></div>
+  </div>
+
+  <button class="sb-run-btn" id="runAllBtn" onclick="runFullPipeline()">
+    ▶ Run Full Pipeline
+  </button>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="main-head">
+    <div>
+      <h1 class="main-title">Content <em>Factory</em></h1>
+      <p class="main-desc">AI generates course materials by subject & lesson — auto-uploaded to Firebase</p>
+    </div>
+    <div class="head-actions">
+      <div class="fb-pill no" id="fbPill"><div class="fb-dot"></div>Firebase</div>
+      <button class="btn-sm btn-outline" onclick="showTab('jobs')">📋 All Jobs</button>
+      <button class="btn-sm btn-gold" onclick="showTab('config')">⚙️ Configure</button>
+    </div>
+  </div>
+
+  <div class="content-area">
+
+    <!-- PROGRESS BAR -->
+    <div class="progress-wrap" id="pipelineProgress">
+      <svg class="progress-ring" viewBox="0 0 44 44">
+        <circle class="bg" cx="22" cy="22" r="18"/>
+        <circle class="fill" id="progressRingFill" cx="22" cy="22" r="18" stroke-dasharray="113" stroke-dashoffset="113"/>
+      </svg>
+      <div class="progress-info">
+        <div class="progress-label" id="progressLabel">Running pipeline...</div>
+        <div class="progress-sub" id="progressSub">Generating content with Claude AI</div>
+      </div>
+    </div>
+
+    <!-- TAB: WORKSPACE -->
+    <div id="tab-workspace">
+
+      <!-- CONFIG PANEL -->
+      <div class="config-panel">
+        <div class="config-title">⚙️ Generation Settings</div>
+        <div class="config-grid">
+          <div class="cfg-group">
+            <div class="cfg-label">Grade Level</div>
+            <select class="cfg-select" id="cfgGrade">
+              <option value="2nd-4th">2nd – 4th Grade (Elementary)</option>
+              <option value="5th-6th">5th – 6th Grade (Upper Elementary)</option>
+              <option value="7th-8th">7th – 8th Grade (Middle School)</option>
+              <option value="9th-10th" selected>9th – 10th Grade (High School)</option>
+              <option value="11th-12th">11th – 12th Grade (AP Level)</option>
+            </select>
+          </div>
+          <div class="cfg-group">
+            <div class="cfg-label">Content Depth</div>
+            <select class="cfg-select" id="cfgDepth">
+              <option value="introductory">Introductory</option>
+              <option value="standard" selected>Standard</option>
+              <option value="advanced">Advanced / AP</option>
+            </select>
+          </div>
+          <div class="cfg-group">
+            <div class="cfg-label">Language Style</div>
+            <select class="cfg-select" id="cfgStyle">
+              <option value="simple">Simple & Clear</option>
+              <option value="engaging" selected>Engaging & Story-driven</option>
+              <option value="academic">Academic</option>
+            </select>
+          </div>
+          <div class="cfg-group">
+            <div class="cfg-label">Content Types to Generate</div>
+            <select class="cfg-select" id="cfgTypes">
+              <option value="all" selected>All Types</option>
+              <option value="notes-quiz">Notes + Quiz Only</option>
+              <option value="slides-notes">Slides + Notes Only</option>
+              <option value="full">Full Pack (all 6)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- WORKSPACE -->
+      <div class="workspace" id="workspace">
+        <div class="ws-header">
+          <div class="ws-lesson-info">
+            <div class="ws-subject" id="wsSubject">Select a lesson from the sidebar</div>
+            <div class="ws-lesson-name" id="wsLessonName">Choose a subject and lesson to begin</div>
+            <div class="ws-grade" id="wsGrade">Configure grade level above</div>
+          </div>
+          <div class="ws-actions">
+            <button class="gen-btn secondary" id="btnGenAll" onclick="generateAllTypes()" disabled>
+              ✨ Generate All
+            </button>
+            <button class="gen-btn" id="btnUploadAll" onclick="uploadAllGenerated()" disabled>
+              ☁️ Upload All to Firebase
+            </button>
+          </div>
+        </div>
+
+        <!-- CONTENT TYPE TABS -->
+        <div class="content-tabs">
+          <div class="ctab active" onclick="switchCTab('notes',this)">📝 Notes<span class="ctab-status" id="cs-notes"></span></div>
+          <div class="ctab" onclick="switchCTab('slides',this)">📊 Slides<span class="ctab-status" id="cs-slides"></span></div>
+          <div class="ctab" onclick="switchCTab('quiz',this)">❓ Quiz<span class="ctab-status" id="cs-quiz"></span></div>
+          <div class="ctab" onclick="switchCTab('summary',this)">📋 Summary<span class="ctab-status" id="cs-summary"></span></div>
+          <div class="ctab" onclick="switchCTab('script',this)">🎬 Video Script<span class="ctab-status" id="cs-script"></span></div>
+          <div class="ctab" onclick="switchCTab('worksheet',this)">📄 Worksheet<span class="ctab-status" id="cs-worksheet"></span></div>
+        </div>
+
+        <!-- PANELS -->
+        <div class="content-panels">
+
+          <!-- NOTES -->
+          <div class="cpanel active" id="cp-notes">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem">
+              <div style="font-size:.8rem;color:var(--muted)">Comprehensive study notes with key concepts, explanations and examples</div>
+              <button class="gen-btn" id="gen-notes" onclick="generateContent('notes')" disabled>✨ Generate Notes</button>
+            </div>
+            <div id="out-notes"><div class="empty-gen"><div class="empty-gen-icon">📝</div><div class="empty-gen-text">Select a lesson and click Generate Notes</div></div></div>
+          </div>
+
+          <!-- SLIDES -->
+          <div class="cpanel" id="cp-slides">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem">
+              <div style="font-size:.8rem;color:var(--muted)">Structured slide deck outline with titles, bullets and presenter notes</div>
+              <button class="gen-btn" id="gen-slides" onclick="generateContent('slides')" disabled>✨ Generate Slides</button>
+            </div>
+            <div id="out-slides"><div class="empty-gen"><div class="empty-gen-icon">📊</div><div class="empty-gen-text">Select a lesson and click Generate Slides</div></div></div>
+          </div>
+
+          <!-- QUIZ -->
+          <div class="cpanel" id="cp-quiz">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem">
+              <div style="font-size:.8rem;color:var(--muted)">20 practice questions with multiple choice options and answer key</div>
+              <button class="gen-btn" id="gen-quiz" onclick="generateContent('quiz')" disabled>✨ Generate Quiz</button>
+            </div>
+            <div id="out-quiz"><div class="empty-gen"><div class="empty-gen-icon">❓</div><div class="empty-gen-text">Select a lesson and click Generate Quiz</div></div></div>
+          </div>
+
+          <!-- SUMMARY -->
+          <div class="cpanel" id="cp-summary">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem">
+              <div style="font-size:.8rem;color:var(--muted)">Quick reference cheat sheet with key terms, formulas and facts</div>
+              <button class="gen-btn" id="gen-summary" onclick="generateContent('summary')" disabled>✨ Generate Summary</button>
+            </div>
+            <div id="out-summary"><div class="empty-gen"><div class="empty-gen-icon">📋</div><div class="empty-gen-text">Select a lesson and click Generate Summary</div></div></div>
+          </div>
+
+          <!-- VIDEO SCRIPT -->
+          <div class="cpanel" id="cp-script">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem">
+              <div style="font-size:.8rem;color:var(--muted)">Full video lecture script with hooks, explanations and transitions</div>
+              <button class="gen-btn" id="gen-script" onclick="generateContent('script')" disabled>✨ Generate Script</button>
+            </div>
+            <div id="out-script"><div class="empty-gen"><div class="empty-gen-icon">🎬</div><div class="empty-gen-text">Select a lesson and click Generate Script</div></div></div>
+          </div>
+
+          <!-- WORKSHEET -->
+          <div class="cpanel" id="cp-worksheet">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem">
+              <div style="font-size:.8rem;color:var(--muted)">Practice worksheet with problems, fill-in-blanks and short answers</div>
+              <button class="gen-btn" id="gen-worksheet" onclick="generateContent('worksheet')" disabled>✨ Generate Worksheet</button>
+            </div>
+            <div id="out-worksheet"><div class="empty-gen"><div class="empty-gen-icon">📄</div><div class="empty-gen-text">Select a lesson and click Generate Worksheet</div></div></div>
+          </div>
+
+        </div>
+
+        <!-- UPLOAD LOG -->
+        <div style="padding:0 1.5rem 1.5rem">
+          <div class="upload-log" id="uploadLog"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: ALL JOBS -->
+    <div id="tab-jobs" style="display:none">
+      <div style="font-family:var(--font-d);font-size:1.3rem;font-weight:700;color:#fff;margin-bottom:1.5rem">All <em style="font-style:italic;color:var(--gold)">Generated Content</em></div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden">
+        <table class="jobs-table" id="jobsTable">
+          <thead><tr>
+            <th>Subject</th><th>Lesson</th><th>Type</th><th>Grade</th><th>Status</th><th>Firebase</th><th>Actions</th>
+          </tr></thead>
+          <tbody id="jobsBody">
+            <tr><td colspan="7" style="text-align:center;color:var(--muted);padding:2rem;font-size:.85rem">No content generated yet</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB: CONFIG -->
+    <div id="tab-config" style="display:none">
+      <div style="font-family:var(--font-d);font-size:1.3rem;font-weight:700;color:#fff;margin-bottom:1.5rem">Firebase <em style="font-style:italic;color:var(--gold)">Connection</em></div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.5rem">
+        <p style="color:var(--muted);font-size:.85rem;margin-bottom:1rem">This tool reads your Firebase config from localStorage (saved by firebase-setup.html). If not connected, go to the setup page first.</p>
+        <div id="fbConfigStatus" style="font-size:.85rem;color:var(--muted)">Checking...</div>
+        <div style="margin-top:1rem;display:flex;gap:.8rem;flex-wrap:wrap">
+          <a href="firebase-setup.html" class="btn-sm btn-outline" style="text-decoration:none;display:inline-flex;align-items:center;gap:.4rem">🔥 Go to Firebase Setup</a>
+          <a href="admin-portal.html" class="btn-sm btn-outline" style="text-decoration:none;display:inline-flex;align-items:center;gap:.4rem">⚙️ Go to Admin Portal</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp }  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, collection, addDoc }   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getStorage, ref, uploadString, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js';
+
+// ── CURRICULUM ────────────────────────────────────────────────────────────────
+const CURRICULUM = [
+  { id:'math', name:'Mathematics', icon:'📐', lessons:[
+    'Introduction to Algebra','Linear Equations','Quadratic Equations',
+    'Geometry Basics','Trigonometry','Statistics & Probability',
+    'Calculus Introduction','Functions & Graphs'
+  ]},
+  { id:'science', name:'Science', icon:'🔬', lessons:[
+    'Cell Biology','DNA & Genetics','Human Body Systems',
+    'Photosynthesis','Ecosystems','Chemical Reactions',
+    'Newton\'s Laws of Motion','Electricity & Magnetism'
+  ]},
+  { id:'history', name:'History', icon:'📜', lessons:[
+    'American Revolution','Civil War','World War I',
+    'World War II','Cold War','Civil Rights Movement',
+    'Ancient Civilizations','Industrial Revolution'
+  ]},
+  { id:'english', name:'English', icon:'✍️', lessons:[
+    'Essay Writing Basics','Grammar & Punctuation','Literary Analysis',
+    'Poetry & Prose','Persuasive Writing','Research Skills',
+    'Vocabulary Building','Reading Comprehension'
+  ]},
+  { id:'satprep', name:'SAT Prep', icon:'📊', lessons:[
+    'SAT Math — Algebra','SAT Math — Data Analysis',
+    'SAT Reading — Main Idea','SAT Writing — Grammar',
+    'SAT Essay Strategies','Time Management Tips',
+    'Full Practice Test 1','Full Practice Test 2'
+  ]},
+  { id:'cs', name:'Computer Science', icon:'💻', lessons:[
+    'Introduction to Programming','Variables & Data Types',
+    'Loops & Conditionals','Functions & Methods',
+    'Arrays & Lists','Object Oriented Programming',
+    'Web Basics (HTML/CSS)','Algorithms & Problem Solving'
+  ]},
+];
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let FB=null, AUTH=null, DB=null, STORE=null, fbReady=false;
+let currentSubject=null, currentLesson=null;
+let generated={};  // key: `${subjectId}_${lessonIdx}_${type}` → content
+let uploaded={};   // same key → {url, docId}
+let jobs=[];
+let activeCTab='notes';
+
+const CONTENT_TYPES = ['notes','slides','quiz','summary','script','worksheet'];
+
+// ── FIREBASE ──────────────────────────────────────────────────────────────────
+function initFB() {
+  const cfg = JSON.parse(localStorage.getItem('lm_fb')||'null');
+  if (!cfg?.apiKey || cfg.apiKey==='YOUR_API_KEY') {
+    updateFbPill(false);
+    document.getElementById('fbConfigStatus').innerHTML =
+      '❌ Firebase not configured. <a href="firebase-setup.html" style="color:var(--electric)">Go to setup →</a>';
+    return;
+  }
+  try {
+    const app = initializeApp(cfg,'content-factory');
+    AUTH  = getAuth(app);
+    DB    = getFirestore(app);
+    STORE = getStorage(app);
+    fbReady = true;
+    updateFbPill(true);
+    document.getElementById('fbConfigStatus').innerHTML =
+      '✅ Firebase connected — Project: <strong style="color:#fff">'+cfg.projectId+'</strong>';
+    autoSignIn();
+  } catch(e) { console.error(e); updateFbPill(false); }
+}
+
+async function autoSignIn() {
+  const admin = JSON.parse(localStorage.getItem('lm_admin')||'{}');
+  if (!admin.email || !admin.pass) return;
+  try { await signInWithEmailAndPassword(AUTH, admin.email, admin.pass); }
+  catch(e) { console.warn('Auto sign-in failed:', e.message); }
+}
+
+function updateFbPill(ok) {
+  const el = document.getElementById('fbPill');
+  el.className = 'fb-pill '+(ok?'ok':'no');
+  el.innerHTML = `<div class="fb-dot"></div>${ok?'🔥 Firebase':'❌ Firebase'}`;
+}
+
+// ── CURRICULUM TREE ───────────────────────────────────────────────────────────
+function renderTree() {
+  const tree = document.getElementById('curriculumTree');
+  tree.innerHTML = CURRICULUM.map(s => `
+    <div class="tree-subject" id="ts-${s.id}">
+      <div class="tree-subject-header" onclick="toggleSubject('${s.id}')">
+        <span class="tree-subject-icon">${s.icon}</span>
+        <span class="tree-subject-name">${s.name}</span>
+        <span class="tree-subject-count">${s.lessons.length}</span>
+        <span class="tree-chevron">▶</span>
+      </div>
+      <div class="tree-lessons">
+        ${s.lessons.map((l,i) => `
+          <div class="tree-lesson" id="tl-${s.id}-${i}" onclick="selectLesson('${s.id}',${i})">
+            <div class="tree-lesson-dot"></div>
+            ${l}
+          </div>`).join('')}
+      </div>
+    </div>`).join('');
+  updateStats();
+}
+
+function toggleSubject(id) {
+  const el = document.getElementById('ts-'+id);
+  el.classList.toggle('open');
+}
+
+function selectLesson(subjectId, lessonIdx) {
+  // Clear active states
+  document.querySelectorAll('.tree-lesson').forEach(el => el.classList.remove('active'));
+  document.getElementById(`tl-${subjectId}-${lessonIdx}`).classList.add('active');
+
+  const subject = CURRICULUM.find(s => s.id===subjectId);
+  currentSubject = subject;
+  currentLesson  = { idx: lessonIdx, name: subject.lessons[lessonIdx] };
+
+  // Update workspace header
+  document.getElementById('wsSubject').textContent   = `${subject.icon} ${subject.name}`;
+  document.getElementById('wsLessonName').textContent = currentLesson.name;
+  document.getElementById('wsGrade').textContent      = getGradeLabel() + ' • ' + getCfg().depth + ' level';
+
+  // Enable buttons
+  document.getElementById('btnGenAll').disabled    = false;
+  document.getElementById('btnUploadAll').disabled = false;
+  CONTENT_TYPES.forEach(t => { document.getElementById('gen-'+t).disabled = false; });
+
+  // Load any existing generated content
+  CONTENT_TYPES.forEach(t => {
+    const key = genKey(t);
+    if (generated[key]) showGenerated(t, generated[key], !!uploaded[key]);
+    else clearPanel(t);
+    updateTabStatus(t);
+  });
+
+  addLog('info', `Selected: ${subject.name} → ${currentLesson.name}`);
+}
+
+function genKey(type) {
+  if (!currentSubject||!currentLesson) return null;
+  return `${currentSubject.id}_${currentLesson.idx}_${type}`;
+}
+
+function getCfg() {
+  return {
+    grade: document.getElementById('cfgGrade').value,
+    depth: document.getElementById('cfgDepth').value,
+    style: document.getElementById('cfgStyle').value,
+  };
+}
+
+function getGradeLabel() {
+  const map = {'2nd-4th':'2nd–4th Grade','5th-6th':'5th–6th Grade','7th-8th':'7th–8th Grade','9th-10th':'9th–10th Grade','11th-12th':'11th–12th Grade'};
+  return map[getCfg().grade] || getCfg().grade;
+}
+
+// ── CLAUDE API ────────────────────────────────────────────────────────────────
+async function callClaude(prompt) {
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1000,
+      messages: [{ role:'user', content: prompt }]
+    })
+  });
+  if (!res.ok) { const e=await res.json(); throw new Error(e?.error?.message||'API error'); }
+  const data = await res.json();
+  return data.content?.find(b=>b.type==='text')?.text || '';
+}
+
+// ── PROMPTS ───────────────────────────────────────────────────────────────────
+function buildPrompt(type) {
+  const cfg = getCfg();
+  const grade = getGradeLabel();
+  const subj  = currentSubject.name;
+  const lesson = currentLesson.name;
+
+  const base = `Subject: ${subj} | Lesson: ${lesson} | Grade: ${grade} | Level: ${cfg.depth} | Style: ${cfg.style}`;
+
+  const prompts = {
+    notes: `Create comprehensive study notes for a K-12 student.
+${base}
+
+Write detailed lesson notes including:
+1. Learning Objectives (3-4 bullet points)
+2. Key Vocabulary (8-10 terms with definitions)
+3. Main Concepts (3-4 sections with clear explanations)
+4. Real-world Examples and Analogies
+5. Important Facts to Remember
+6. Common Mistakes to Avoid
+7. Connections to Other Topics
+
+Use clear headings, bullet points, and engaging language appropriate for ${grade} students.`,
+
+    slides: `Create a complete slide deck outline for a classroom presentation.
+${base}
+
+Format as a 12-slide presentation:
+SLIDE 1: Title slide (lesson title, subject, grade)
+SLIDE 2: Learning Objectives
+SLIDES 3-9: Core content slides (one concept per slide with title, 4-5 bullet points, speaker notes)
+SLIDE 10: Key Takeaways
+SLIDE 11: Practice Questions (3 questions)
+SLIDE 12: Summary & Next Steps
+
+For each slide include:
+- TITLE: [slide title]
+- CONTENT: [bullet points]
+- SPEAKER NOTES: [what teacher says]`,
+
+    quiz: `Create a comprehensive practice quiz.
+${base}
+
+Generate 20 questions total:
+- 10 Multiple Choice (4 options each, mark correct answer with *)
+- 5 True/False questions
+- 5 Short Answer questions
+
+Format each question clearly:
+Q1. [question text]
+A) option  B) option  C) *correct option  D) option
+
+End with a complete ANSWER KEY section.
+Make questions progressively harder (easy → medium → hard).`,
+
+    summary: `Create a quick-reference cheat sheet / study guide.
+${base}
+
+Include:
+📌 TOPIC OVERVIEW (2-3 sentences)
+🔑 KEY TERMS (10 terms with one-line definitions)
+📊 IMPORTANT FORMULAS/RULES (if applicable)
+⚡ FAST FACTS (10 bullet points — must-know facts)
+🔗 CONNECTIONS (how this connects to other topics)
+💡 MEMORY TRICKS (mnemonics or tips to remember key points)
+❓ LIKELY EXAM QUESTIONS (5 common exam questions)
+
+Keep it concise — this should fit on 1-2 pages.`,
+
+    script: `Write a complete video lecture script for an AI tutor to present.
+${base}
+
+Structure:
+[INTRO - 30 seconds]
+Hook: Start with an interesting question or surprising fact
+Introduce the topic and what students will learn
+
+[MAIN CONTENT - 4 minutes]
+Section 1: [first concept] — explain clearly with analogy
+Section 2: [second concept] — build on previous
+Section 3: [third concept] — real world application
+
+[EXAMPLES - 1 minute]
+Walk through 2 concrete examples step by step
+
+[RECAP - 30 seconds]
+Summarize 3 key takeaways
+Preview what's coming next
+
+Write in conversational, engaging language. Include [PAUSE], [SHOW DIAGRAM], [ASK STUDENTS] cues.`,
+
+    worksheet: `Create a student practice worksheet.
+${base}
+
+Section A: WARM UP (5 simple questions)
+Section B: CORE PRACTICE (8 medium difficulty problems)
+Section C: CHALLENGE (3 harder problems)
+Section D: REFLECTION
+  - What was the most important thing you learned?
+  - What questions do you still have?
+  - Rate your confidence: ⭐⭐⭐⭐⭐
+
+Include clear instructions for each section.
+Leave space indicators like [ANSWER HERE] or _________
+End with a TEACHER NOTES section with the answer key.`
+  };
+
+  return prompts[type];
+}
+
+// ── GENERATE CONTENT ──────────────────────────────────────────────────────────
+window.generateContent = async function(type) {
+  if (!currentLesson) { toast('Select a lesson first','err'); return; }
+
+  const btn = document.getElementById('gen-'+type);
+  btn.disabled = true;
+  btn.innerHTML = `<span class="spin">⏳</span> Generating...`;
+
+  const key = genKey(type);
+  document.getElementById(`cs-${type}`).className = 'ctab-status running';
+  addLog('info', `Generating ${type} for: ${currentLesson.name}...`);
+
+  try {
+    const prompt  = buildPrompt(type);
+    const content = await callClaude(prompt);
+    generated[key] = content;
+
+    showGenerated(type, content, false);
+    updateTabStatus(type);
+    updateStats();
+
+    // Add to jobs
+    addJob(type, content, 'generated');
+    addLog('ok', `✅ ${type} generated (${content.length} chars)`);
+    toast(`${type} generated successfully!`, 'ok');
+  } catch(e) {
+    addLog('err', `❌ Failed to generate ${type}: ${e.message}`);
+    toast('Generation failed: '+e.message, 'err');
+    document.getElementById(`cs-${type}`).className = 'ctab-status';
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = `✨ Regenerate ${type.charAt(0).toUpperCase()+type.slice(1)}`;
+  }
+};
+
+window.generateAllTypes = async function() {
+  if (!currentLesson) { toast('Select a lesson first','err'); return; }
+  const btn = document.getElementById('btnGenAll');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin">⏳</span> Generating all...';
+
+  showProgress(true, `Generating all content for: ${currentLesson.name}`, '');
+
+  for (let i=0; i<CONTENT_TYPES.length; i++) {
+    const type = CONTENT_TYPES[i];
+    updateProgress(i, CONTENT_TYPES.length, `Generating ${type}...`);
+    await generateContent(type);
+    await new Promise(r=>setTimeout(r,600));
+  }
+
+  showProgress(false);
+  btn.disabled = false;
+  btn.innerHTML = '✨ Generate All';
+  toast('All content generated! Ready to upload.','ok');
+};
+
+// ── UPLOAD TO FIREBASE ────────────────────────────────────────────────────────
+window.uploadContent = async function(type) {
+  if (!fbReady) { toast('Firebase not connected. Go to Configure tab.','err'); return; }
+  const key = genKey(type);
+  if (!generated[key]) { toast('Generate content first','err'); return; }
+
+  addLog('info', `Uploading ${type} to Firebase...`);
+
+  try {
+    const content  = generated[key];
+    const filename = `${currentSubject.id}_${currentLesson.name.replace(/\s+/g,'_')}_${type}.txt`;
+    const path     = `materials/${currentSubject.id}/${filename}`;
+    const storageRef = ref(STORE, path);
+
+    await uploadString(storageRef, content, 'raw');
+    const url = await getDownloadURL(storageRef);
+
+    // Save to Firestore
+    const docRef = await addDoc(collection(DB,'materials'), {
+      title:       `${currentLesson.name} — ${typeLabel(type)}`,
+      course:      currentSubject.name,
+      grade:       getGradeLabel(),
+      subject:     currentSubject.name,
+      access:      'all',
+      type:        typeToFileType(type),
+      filename,
+      filePath:    path,
+      downloadURL: url,
+      desc:        `AI-generated ${typeLabel(type)} for ${currentLesson.name}`,
+      uploadedAt:  new Date().toISOString(),
+      views:       0,
+      downloads:   0,
+      aiGenerated: true,
+      lessonId:    `${currentSubject.id}_${currentLesson.idx}`,
+    });
+
+    uploaded[key] = { url, docId: docRef.id };
+    showGenerated(type, generated[key], true);
+    updateTabStatus(type);
+    updateJobStatus(key, 'uploaded', url);
+    updateLessonDone();
+    addLog('ok', `✅ ${type} uploaded → ${url.substring(0,50)}...`);
+    toast(`${type} uploaded to Firebase!`,'ok');
+  } catch(e) {
+    addLog('err', `❌ Upload failed: ${e.message}`);
+    toast('Upload failed: '+e.message,'err');
+  }
+};
+
+window.uploadAllGenerated = async function() {
+  if (!fbReady) { toast('Firebase not connected','err'); return; }
+  const btn = document.getElementById('btnUploadAll');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin">⏳</span> Uploading...';
+
+  let count = 0;
+  for (const type of CONTENT_TYPES) {
+    const key = genKey(type);
+    if (generated[key] && !uploaded[key]) {
+      await uploadContent(type);
+      count++;
+      await new Promise(r=>setTimeout(r,400));
+    }
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '☁️ Upload All to Firebase';
+  toast(`${count} file(s) uploaded to Firebase!`,'ok');
+  updateStats();
+};
+
+// ── FULL PIPELINE ─────────────────────────────────────────────────────────────
+window.runFullPipeline = async function() {
+  if (!currentLesson) { toast('Select a lesson from the sidebar first','err'); return; }
+  const btn = document.getElementById('runAllBtn');
+  btn.disabled = true;
+  btn.className = 'sb-run-btn running';
+  btn.innerHTML = '<span class="spin">⏳</span> Running...';
+
+  showProgress(true, 'Full Pipeline Running', 'Generate → Upload to Firebase');
+
+  // Generate all
+  for (let i=0; i<CONTENT_TYPES.length; i++) {
+    const type = CONTENT_TYPES[i];
+    updateProgress(i, CONTENT_TYPES.length*2, `Generating ${type}...`);
+    await generateContent(type);
+    await new Promise(r=>setTimeout(r,500));
+  }
+
+  // Upload all
+  for (let i=0; i<CONTENT_TYPES.length; i++) {
+    const type = CONTENT_TYPES[i];
+    updateProgress(CONTENT_TYPES.length+i, CONTENT_TYPES.length*2, `Uploading ${type} to Firebase...`);
+    await uploadContent(type);
+    await new Promise(r=>setTimeout(r,400));
+  }
+
+  showProgress(false);
+  btn.disabled = false;
+  btn.className = 'sb-run-btn';
+  btn.innerHTML = '▶ Run Full Pipeline';
+  toast('🎉 Pipeline complete! All content generated & uploaded!','ok');
+  updateStats();
+};
+
+// ── UI HELPERS ────────────────────────────────────────────────────────────────
+function showGenerated(type, content, isUploaded) {
+  const uploadedClass = isUploaded ? 'uploaded' : 'upload';
+  const uploadedIcon  = isUploaded ? '✅' : '☁️';
+  const uploadedTitle = isUploaded ? 'Uploaded to Firebase' : 'Upload to Firebase';
+
+  document.getElementById('out-'+type).innerHTML = `
+    <div class="gen-card">
+      <div class="gen-card-head">
+        <div class="gen-card-title">
+          <span class="type-icon ti-${type}">
+            ${{notes:'📝',slides:'📊',quiz:'❓',summary:'📋',script:'🎬',worksheet:'📄'}[type]}
+          </span>
+          ${typeLabel(type)} — ${currentLesson.name}
+        </div>
+        <div class="gen-card-actions">
+          <div class="icon-btn" title="Copy to clipboard" onclick="copyContent('${type}')">📋</div>
+          <div class="icon-btn ${uploadedClass}" title="${uploadedTitle}" onclick="uploadContent('${type}')">${uploadedIcon}</div>
+        </div>
+      </div>
+      <div class="gen-card-body prose" id="body-${type}">${escHTML(content)}</div>
+    </div>`;
+}
+
+function clearPanel(type) {
+  const icons = {notes:'📝',slides:'📊',quiz:'❓',summary:'📋',script:'🎬',worksheet:'📄'};
+  const labels = {notes:'Notes',slides:'Slides',quiz:'Quiz',summary:'Summary',script:'Video Script',worksheet:'Worksheet'};
+  document.getElementById('out-'+type).innerHTML = `
+    <div class="empty-gen">
+      <div class="empty-gen-icon">${icons[type]}</div>
+      <div class="empty-gen-text">Click "Generate ${labels[type]}" to create AI content</div>
+    </div>`;
+}
+
+window.copyContent = function(type) {
+  const key = genKey(type);
+  if (!generated[key]) return;
+  navigator.clipboard.writeText(generated[key]);
+  toast('Copied to clipboard!','ok');
+};
+
+window.switchCTab = function(type, el) {
+  document.querySelectorAll('.ctab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.cpanel').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('cp-'+type).classList.add('active');
+  activeCTab = type;
+};
+
+function updateTabStatus(type) {
+  const key = genKey(type);
+  const el  = document.getElementById('cs-'+type);
+  if (!el) return;
+  if (uploaded[key])   { el.className='ctab-status done'; }
+  else if (generated[key]) { el.className='ctab-status done'; el.style.background='#4f6ef7'; }
+  else { el.className='ctab-status'; }
+}
+
+function updateLessonDone() {
+  const allUploaded = CONTENT_TYPES.every(t => uploaded[genKey(t)]);
+  if (allUploaded && currentSubject && currentLesson) {
+    const el = document.getElementById(`tl-${currentSubject.id}-${currentLesson.idx}`);
+    if (el) el.classList.add('done');
+  }
+}
+
+// ── JOBS ──────────────────────────────────────────────────────────────────────
+function addJob(type, content, status) {
+  const key = genKey(type);
+  const existing = jobs.findIndex(j=>j.key===key);
+  const job = {
+    key, type, status,
+    subject: currentSubject.name,
+    lesson:  currentLesson.name,
+    grade:   getGradeLabel(),
+    chars:   content.length,
+    time:    new Date().toLocaleTimeString(),
+    url:     null
+  };
+  if (existing>-1) jobs[existing]=job; else jobs.push(job);
+  renderJobs();
+}
+
+function updateJobStatus(key, status, url) {
+  const j = jobs.find(j=>j.key===key);
+  if (j) { j.status=status; j.url=url; renderJobs(); }
+}
+
+function renderJobs() {
+  const tbody = document.getElementById('jobsBody');
+  if (!jobs.length) {
+    tbody.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:2rem;font-size:.85rem">No content generated yet</td></tr>';
+    return;
+  }
+  tbody.innerHTML = jobs.slice().reverse().map(j => `
+    <tr>
+      <td style="color:#fff;font-weight:500">${j.subject}</td>
+      <td style="color:var(--text)">${j.lesson}</td>
+      <td><span style="font-size:.75rem">${typeLabel(j.type)}</span></td>
+      <td style="color:var(--muted);font-size:.75rem">${j.grade}</td>
+      <td><span class="status-pill sp-${j.status}">${j.status}</span></td>
+      <td>${j.url?`<a href="${j.url}" target="_blank" style="color:var(--electric);font-size:.75rem">View ↗</a>`:'<span style="color:var(--muted);font-size:.75rem">—</span>'}</td>
+      <td>${j.url?`<button class="btn-sm btn-outline" style="font-size:.7rem" onclick="navigator.clipboard.writeText('${j.url}');toast('URL copied!','ok')">📋</button>`:''}
+      </td>
+    </tr>`).join('');
+}
+
+// ── PROGRESS ──────────────────────────────────────────────────────────────────
+function showProgress(show, label='', sub='') {
+  const el = document.getElementById('pipelineProgress');
+  el.classList.toggle('visible', show);
+  if (show) {
+    document.getElementById('progressLabel').textContent = label;
+    document.getElementById('progressSub').textContent   = sub;
+  }
+}
+
+function updateProgress(done, total, label) {
+  const pct    = Math.round((done/total)*100);
+  const offset = 113 - (113 * pct/100);
+  document.getElementById('progressRingFill').style.strokeDashoffset = offset;
+  document.getElementById('progressLabel').textContent = label;
+  document.getElementById('progressSub').textContent   = `${done}/${total} complete (${pct}%)`;
+}
+
+// ── LOG ───────────────────────────────────────────────────────────────────────
+function addLog(type, msg) {
+  const log = document.getElementById('uploadLog');
+  log.classList.add('visible');
+  const t = new Date().toLocaleTimeString();
+  const line = document.createElement('div');
+  line.className = 'log-line';
+  line.innerHTML = `<span class="log-time">${t}</span><span class="log-msg ${type}">${msg}</span>`;
+  log.appendChild(line);
+  log.scrollTop = log.scrollHeight;
+}
+
+// ── STATS ─────────────────────────────────────────────────────────────────────
+function updateStats() {
+  const totalLessons = CURRICULUM.reduce((a,s)=>a+s.lessons.length,0);
+  const genCount     = Object.keys(generated).length;
+  const upCount      = Object.keys(uploaded).length;
+  document.getElementById('statLessons').textContent   = totalLessons;
+  document.getElementById('statGenerated').textContent = genCount;
+  document.getElementById('statUploaded').textContent  = upCount;
+  document.getElementById('statFiles').textContent     = upCount;
+}
+
+// ── TAB SWITCHING ─────────────────────────────────────────────────────────────
+window.showTab = function(tab) {
+  document.getElementById('tab-workspace').style.display = tab==='workspace'?'block':'none';
+  document.getElementById('tab-jobs').style.display      = tab==='jobs'?'block':'none';
+  document.getElementById('tab-config').style.display    = tab==='config'?'block':'none';
+};
+
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+function typeLabel(t) {
+  return {notes:'Study Notes',slides:'Slide Deck',quiz:'Practice Quiz',summary:'Quick Summary',script:'Video Script',worksheet:'Worksheet'}[t]||t;
+}
+
+function typeToFileType(t) {
+  return {notes:'notes',slides:'ppt',quiz:'pdf',summary:'pdf',script:'notes',worksheet:'pdf'}[t]||'other';
+}
+
+function escHTML(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+}
+
+let tt;
+window.toast = function(msg,type='') {
+  const el=document.getElementById('toast');
+  el.textContent=msg; el.className=`toast ${type} show`;
+  clearTimeout(tt); tt=setTimeout(()=>el.classList.remove('show'),3800);
+};
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+renderTree();
+initFB();
+updateStats();
+
+// Open first subject by default
+document.querySelector('.tree-subject-header').click();
+</script>
+</body>
+</html>
