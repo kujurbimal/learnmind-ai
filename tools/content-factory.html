@@ -200,6 +200,7 @@ body{font-family:var(--font-b);background:var(--navy);color:var(--text);min-heig
     </div>
     <div class="top-right">
       <div class="fb-badge no" id="fbBadge"><div class="fb-dot"></div><span id="fbText">Firebase</span></div>
+      <span id="apiKeyStatus" onclick="showApiKeyModal()" style="font-size:.72rem;font-weight:600;cursor:pointer;padding:.3rem .7rem;border-radius:100px;border:1px solid rgba(245,200,66,.3);background:rgba(245,200,66,.08);color:var(--gold)">🔑 Add API Key</span>
       <button class="tbtn tbtn-outline" onclick="showView('jobs')">📋 Jobs</button>
       <button class="tbtn tbtn-gold" onclick="showView('main')">🏠 Workspace</button>
     </div>
@@ -499,10 +500,25 @@ function renderCards() {
 }
 
 // ── CLAUDE API ────────────────────────────────────────────────────────────────
+function getApiKey() {
+  return localStorage.getItem('lm_anthropic_key') || '';
+}
+
 function callClaude(prompt, callback) {
+  var key = getApiKey();
+  if (!key) {
+    showApiKeyModal();
+    callback(new Error('No API key. Please enter your Anthropic API key.'), null);
+    return;
+  }
   fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': key,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-allow-browser': 'true'
+    },
     body: JSON.stringify({
       model: 'claude-sonnet-4-20250514',
       max_tokens: 1000,
@@ -521,6 +537,60 @@ function callClaude(prompt, callback) {
     callback(null, text);
   })
   .catch(function(e){ callback(e, null); });
+}
+
+function showApiKeyModal() {
+  var existing = document.getElementById('apiKeyModal');
+  if (existing) { existing.style.display='flex'; return; }
+  var modal = document.createElement('div');
+  modal.id = 'apiKeyModal';
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);z-index:9999;display:flex;align-items:center;justify-content:center;padding:1rem';
+  modal.innerHTML = '<div style="background:#131838;border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:2rem;width:100%;max-width:480px">'
+    +'<div style="font-family:var(--font-d);font-size:1.4rem;font-weight:900;color:#fff;margin-bottom:.4rem">🔑 Anthropic API Key Required</div>'
+    +'<p style="color:var(--muted);font-size:.85rem;line-height:1.6;margin-bottom:1.2rem">The Content Factory uses Claude AI to generate course materials. You need an Anthropic API key to use this feature.</p>'
+    +'<div style="background:rgba(245,200,66,.08);border:1px solid rgba(245,200,66,.2);border-radius:10px;padding:.8rem 1rem;font-size:.78rem;color:#f5c842;margin-bottom:1.2rem;line-height:1.6">'
+    +'📋 <strong>How to get your key:</strong><br>'
+    +'1. Go to <strong>console.anthropic.com</strong><br>'
+    +'2. Sign in → API Keys → Create Key<br>'
+    +'3. Copy the key (starts with sk-ant-...)<br>'
+    +'4. Add billing credit at console.anthropic.com/billing'
+    +'</div>'
+    +'<label style="font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:.4rem">Your Anthropic API Key</label>'
+    +'<input id="apiKeyInput" type="password" placeholder="sk-ant-api03-..." style="width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:.75rem 1rem;color:#fff;font-family:var(--font-m);font-size:.85rem;outline:none;margin-bottom:1rem"/>'
+    +'<div style="display:flex;gap:.8rem">'
+    +'<button onclick="saveApiKey()" style="flex:1;background:#4f6ef7;color:#fff;border:none;padding:.8rem;border-radius:10px;font-family:var(--font-b);font-weight:700;font-size:.9rem;cursor:pointer">Save & Continue</button>'
+    +'<button onclick="document.getElementById(\'apiKeyModal\').style.display=\'none\'" style="background:rgba(255,255,255,.06);color:var(--muted);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:.8rem 1.2rem;font-family:var(--font-b);font-size:.85rem;cursor:pointer">Cancel</button>'
+    +'</div>'
+    +'<p style="color:rgba(138,138,170,.5);font-size:.7rem;margin-top:.8rem;text-align:center">Your key is stored only in your browser — never sent anywhere except Anthropic</p>'
+    +'</div>';
+  document.body.appendChild(modal);
+}
+
+function saveApiKey() {
+  var key = document.getElementById('apiKeyInput').value.trim();
+  if (!key || !key.startsWith('sk-')) {
+    toast('Invalid key — must start with sk-ant-...', 'err');
+    return;
+  }
+  localStorage.setItem('lm_anthropic_key', key);
+  document.getElementById('apiKeyModal').style.display = 'none';
+  updateApiKeyStatus();
+  toast('API key saved! Now click Generate again.', 'ok');
+}
+
+function updateApiKeyStatus() {
+  var key = getApiKey();
+  var el  = document.getElementById('apiKeyStatus');
+  if (!el) return;
+  if (key) {
+    el.textContent = '🔑 API Key: sk-ant-...'+key.slice(-4);
+    el.style.color = 'var(--green)';
+  } else {
+    el.textContent = '🔑 No API Key — click to add';
+    el.style.color = 'var(--gold)';
+    el.style.cursor = 'pointer';
+    el.onclick = showApiKeyModal;
+  }
 }
 
 // ── PROMPTS ───────────────────────────────────────────────────────────────────
@@ -878,6 +948,12 @@ function toast(msg, type) {
 // ── INIT ──────────────────────────────────────────────────────────────────────
 renderTree();
 initFirebase();
+updateApiKeyStatus();
+
+// Show API key modal on load if no key saved
+if (!getApiKey()) {
+  setTimeout(showApiKeyModal, 800);
+}
 
 // Open Math by default
 document.getElementById('ts-math').classList.add('open');
