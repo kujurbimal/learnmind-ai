@@ -9,413 +9,286 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --navy:#0b0f2a;--indigo:#131838;--electric:#4f6ef7;--gold:#f5c842;
-  --green:#22c55e;--red:#f87171;--purple:#a78bfa;--teal:#2dd4bf;--orange:#fb923c;
+  --green:#22c55e;--red:#f87171;--purple:#a78bfa;--orange:#fb923c;
   --text:#e8e4d8;--muted:#8a8aaa;--border:rgba(255,255,255,0.08);
   --card:rgba(255,255,255,0.04);--card2:rgba(255,255,255,0.07);
   --font-d:'Fraunces',serif;--font-b:'DM Sans',sans-serif;--font-m:'DM Mono',monospace;
 }
 body{font-family:var(--font-b);background:var(--navy);color:var(--text);min-height:100vh}
-
-/* LAYOUT */
-.app{display:grid;grid-template-columns:300px 1fr;min-height:100vh}
-.sidebar{background:var(--indigo);border-right:1px solid var(--border);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
-.main{overflow-y:auto}
+.app{display:grid;grid-template-columns:280px 1fr;min-height:100vh}
 
 /* SIDEBAR */
-.sb-head{padding:1.5rem;border-bottom:1px solid var(--border)}
+.sidebar{background:var(--indigo);border-right:1px solid var(--border);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sb-head{padding:1.2rem 1.5rem;border-bottom:1px solid var(--border)}
 .sb-logo{font-family:var(--font-d);font-size:1.2rem;font-weight:900;color:#fff}
 .sb-logo span{color:var(--gold)}
-.sb-sub{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--purple);margin-top:.2rem}
-
-.sb-section{padding:1rem 1.5rem;border-bottom:1px solid var(--border)}
-.sb-label{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem}
-
-/* CURRICULUM TREE */
-.tree{}
-.tree-subject{margin-bottom:.4rem}
-.tree-subject-header{display:flex;align-items:center;gap:.5rem;padding:.4rem .5rem;border-radius:6px;cursor:pointer;transition:background .2s;font-size:.82rem;font-weight:600;color:var(--text)}
-.tree-subject-header:hover{background:var(--card)}
-.tree-subject-header.active{background:rgba(79,110,247,.12);color:#fff}
-.tree-subject-icon{font-size:.85rem;width:18px;text-align:center;flex-shrink:0}
-.tree-subject-name{flex:1}
-.tree-subject-count{font-size:.65rem;color:var(--muted);font-family:var(--font-m)}
-.tree-chevron{font-size:.6rem;color:var(--muted);transition:transform .2s}
-.tree-subject.open .tree-chevron{transform:rotate(90deg)}
-.tree-lessons{display:none;padding-left:1.2rem;margin-top:.2rem}
-.tree-subject.open .tree-lessons{display:block}
-.tree-lesson{display:flex;align-items:center;gap:.5rem;padding:.3rem .5rem;border-radius:5px;cursor:pointer;font-size:.78rem;color:var(--muted);transition:all .2s;border-left:2px solid transparent}
-.tree-lesson:hover{color:var(--text);background:var(--card)}
-.tree-lesson.active{color:var(--electric);border-left-color:var(--electric);background:rgba(79,110,247,.06)}
+.sb-tag{font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--purple);margin-top:.2rem}
+.sb-label{font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:.8rem 1.5rem .4rem}
+.tree{padding:0 .8rem}
+.tree-subj{margin-bottom:.3rem}
+.tree-subj-hdr{display:flex;align-items:center;gap:.5rem;padding:.45rem .6rem;border-radius:7px;cursor:pointer;font-size:.82rem;font-weight:600;color:var(--text);transition:background .15s;user-select:none}
+.tree-subj-hdr:hover{background:var(--card)}
+.tree-subj-icon{font-size:.9rem;flex-shrink:0}
+.tree-subj-name{flex:1}
+.tree-subj-cnt{font-size:.62rem;color:var(--muted);font-family:var(--font-m)}
+.tree-arrow{font-size:.55rem;color:var(--muted);transition:transform .2s;flex-shrink:0}
+.tree-subj.open .tree-arrow{transform:rotate(90deg)}
+.tree-lessons{display:none;padding-left:1rem;padding-bottom:.3rem}
+.tree-subj.open .tree-lessons{display:block}
+.tree-lesson{display:flex;align-items:center;gap:.5rem;padding:.3rem .5rem;border-radius:5px;cursor:pointer;font-size:.77rem;color:var(--muted);transition:all .15s;border-left:2px solid transparent;margin-bottom:.1rem}
+.tree-lesson:hover{color:var(--text);background:rgba(255,255,255,.04)}
+.tree-lesson.sel{color:var(--electric);border-left-color:var(--electric);background:rgba(79,110,247,.07);font-weight:600}
 .tree-lesson.done{color:var(--green)}
-.tree-lesson.done::after{content:'✓';margin-left:auto;font-size:.65rem}
-.tree-lesson-dot{width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0}
+.tree-lesson-dot{width:4px;height:4px;border-radius:50%;background:currentColor;flex-shrink:0}
 
-.sb-stats{padding:1rem 1.5rem;display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
-.sb-stat{background:var(--card);border-radius:8px;padding:.5rem .6rem;text-align:center}
-.sb-stat-n{font-family:var(--font-d);font-size:1.1rem;font-weight:900;color:var(--gold)}
-.sb-stat-l{font-size:.62rem;color:var(--muted);margin-top:.1rem}
-
-.sb-run-btn{margin:1rem 1.5rem;background:var(--electric);color:#fff;border:none;padding:.8rem;border-radius:10px;font-family:var(--font-b);font-weight:700;font-size:.9rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:.5rem;width:calc(100% - 3rem)}
-.sb-run-btn:hover:not(:disabled){filter:brightness(1.1)}
+.sb-stats{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;padding:1rem 1.5rem;border-top:1px solid var(--border);margin-top:auto}
+.sb-stat{background:var(--card);border-radius:8px;padding:.5rem;text-align:center}
+.sb-stat-n{font-family:var(--font-d);font-size:1rem;font-weight:900;color:var(--gold)}
+.sb-stat-l{font-size:.6rem;color:var(--muted);margin-top:.1rem}
+.sb-run-btn{margin:0 1.5rem 1.5rem;background:var(--electric);color:#fff;border:none;padding:.75rem;border-radius:10px;font-family:var(--font-b);font-weight:700;font-size:.88rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:.5rem}
+.sb-run-btn:hover{filter:brightness(1.1)}
 .sb-run-btn:disabled{opacity:.5;cursor:not-allowed}
-.sb-run-btn.running{background:rgba(79,110,247,.3);border:1px solid rgba(79,110,247,.5)}
 
-/* MAIN CONTENT */
-.main-head{padding:2rem 2.5rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
-.main-title{font-family:var(--font-d);font-size:1.8rem;font-weight:900;color:#fff;letter-spacing:-.03em}
-.main-title em{font-style:italic;color:var(--gold)}
-.main-desc{color:var(--muted);font-size:.85rem;margin-top:.3rem}
-.head-actions{display:flex;gap:.6rem;align-items:center}
+/* MAIN */
+.main{overflow-y:auto;display:flex;flex-direction:column}
+.top-bar{padding:1.2rem 2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.8rem;flex-shrink:0}
+.top-title{font-family:var(--font-d);font-size:1.6rem;font-weight:900;color:#fff;letter-spacing:-.03em}
+.top-title em{font-style:italic;color:var(--gold)}
+.top-right{display:flex;align-items:center;gap:.6rem}
+.fb-badge{display:flex;align-items:center;gap:.4rem;font-size:.72rem;font-weight:700;padding:.28rem .7rem;border-radius:100px;border:1px solid}
+.fb-badge.ok{background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.3);color:var(--green)}
+.fb-badge.no{background:rgba(248,113,113,.08);border-color:rgba(248,113,113,.3);color:var(--red)}
+.fb-dot{width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0}
+.tbtn{padding:.38rem .85rem;border-radius:8px;font-size:.78rem;font-weight:600;cursor:pointer;border:none;font-family:var(--font-b);transition:all .2s}
+.tbtn-outline{background:transparent;color:var(--text);border:1px solid var(--border)}
+.tbtn-outline:hover{color:#fff;border-color:rgba(255,255,255,.3)}
+.tbtn-gold{background:var(--gold);color:var(--navy)}
 
-/* FB STATUS */
-.fb-pill{display:flex;align-items:center;gap:.4rem;font-size:.72rem;padding:.3rem .7rem;border-radius:100px;border:1px solid;font-weight:600}
-.fb-pill.ok{background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.3);color:var(--green)}
-.fb-pill.no{background:rgba(248,113,113,.08);border-color:rgba(248,113,113,.3);color:var(--red)}
-.fb-dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
+.content{padding:1.5rem 2rem;flex:1}
 
-.btn-sm{padding:.4rem .9rem;border-radius:8px;font-size:.78rem;font-weight:600;font-family:var(--font-b);cursor:pointer;border:none;transition:all .2s}
-.btn-outline{background:transparent;color:var(--text);border:1px solid var(--border)}
-.btn-outline:hover{border-color:rgba(255,255,255,.3);color:#fff}
-.btn-gold{background:var(--gold);color:var(--navy)}
-.btn-gold:hover{filter:brightness(1.05)}
+/* LESSON BANNER */
+.lesson-banner{background:linear-gradient(135deg,rgba(79,110,247,.1),rgba(245,200,66,.05));border:1px solid var(--border);border-radius:14px;padding:1.2rem 1.5rem;margin-bottom:1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.lb-info{}
+.lb-subject{font-size:.7rem;font-weight:700;color:var(--electric);text-transform:uppercase;letter-spacing:.07em}
+.lb-lesson{font-family:var(--font-d);font-size:1.2rem;font-weight:700;color:#fff;margin-top:.15rem}
+.lb-grade{font-size:.78rem;color:var(--muted);margin-top:.1rem}
+.lb-actions{display:flex;gap:.5rem;flex-wrap:wrap}
+.act-btn{display:flex;align-items:center;gap:.4rem;padding:.5rem 1rem;border-radius:8px;font-size:.8rem;font-weight:600;cursor:pointer;border:none;font-family:var(--font-b);transition:all .2s}
+.act-btn:disabled{opacity:.4;cursor:not-allowed}
+.act-btn-primary{background:var(--electric);color:#fff}
+.act-btn-primary:hover:not(:disabled){filter:brightness(1.1)}
+.act-btn-secondary{background:var(--card);color:var(--text);border:1px solid var(--border)}
+.act-btn-secondary:hover:not(:disabled){background:var(--card2)}
+.act-btn-green{background:rgba(34,197,94,.15);color:var(--green);border:1px solid rgba(34,197,94,.25)}
+.act-btn-green:hover:not(:disabled){background:rgba(34,197,94,.22)}
 
-/* CONTENT AREA */
-.content-area{padding:2rem 2.5rem}
+/* CONFIG ROW */
+.cfg-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.8rem;margin-bottom:1.5rem}
+.cfg-box{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:.8rem 1rem}
+.cfg-lbl{font-size:.67rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.4rem}
+.cfg-sel{width:100%;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:7px;padding:.45rem .7rem;color:#fff;font-family:var(--font-b);font-size:.82rem;outline:none}
+.cfg-sel option{background:var(--navy)}
 
-/* CONFIG PANEL */
-.config-panel{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.5rem;margin-bottom:2rem}
-.config-title{font-weight:700;color:#fff;font-size:.95rem;margin-bottom:1.2rem;display:flex;align-items:center;gap:.5rem}
-.config-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem}
-.cfg-group{display:flex;flex-direction:column;gap:.35rem}
-.cfg-label{font-size:.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
-.cfg-select,.cfg-input{background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:8px;padding:.55rem .8rem;color:#fff;font-family:var(--font-b);font-size:.85rem;outline:none;transition:border-color .2s}
-.cfg-select:focus,.cfg-input:focus{border-color:rgba(79,110,247,.5)}
-.cfg-select option{background:var(--navy)}
+/* CONTENT TYPE GRID */
+.ctype-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem}
 
-/* LESSON WORKSPACE */
-.workspace{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:2rem}
-.ws-header{padding:1.2rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.8rem}
-.ws-lesson-info{}
-.ws-subject{font-size:.72rem;font-weight:700;color:var(--electric);text-transform:uppercase;letter-spacing:.06em}
-.ws-lesson-name{font-family:var(--font-d);font-size:1.3rem;font-weight:700;color:#fff;margin-top:.2rem}
-.ws-grade{font-size:.78rem;color:var(--muted);margin-top:.15rem}
-.ws-actions{display:flex;gap:.5rem;flex-wrap:wrap}
+/* CONTENT CARD */
+.ccard{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:border-color .2s}
+.ccard:hover{border-color:rgba(79,110,247,.25)}
+.ccard.generating{border-color:rgba(79,110,247,.5);animation:cardPulse 1.5s ease-in-out infinite}
+.ccard.done{border-color:rgba(34,197,94,.25)}
+.ccard.uploaded{border-color:rgba(34,197,94,.5)}
+@keyframes cardPulse{0%,100%{border-color:rgba(79,110,247,.3)}50%{border-color:rgba(79,110,247,.7)}}
 
-/* CONTENT TYPE TABS */
-.content-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);padding:0 1.5rem;overflow-x:auto}
-.ctab{padding:.7rem 1rem;font-size:.8rem;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap;font-family:var(--font-b)}
-.ctab:hover{color:var(--text)}
-.ctab.active{color:#fff;border-bottom-color:var(--electric)}
-.ctab .ctab-status{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--muted);margin-left:.4rem;vertical-align:middle}
-.ctab .ctab-status.done{background:var(--green)}
-.ctab .ctab-status.running{background:var(--electric);animation:pulse 1s infinite}
+.ccard-head{padding:.85rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.ccard-title{display:flex;align-items:center;gap:.5rem;font-size:.85rem;font-weight:600;color:#fff}
+.ccard-icon{font-size:1rem}
+.ccard-btns{display:flex;gap:.35rem}
+.ccard-btn{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid var(--border);background:transparent;font-size:.72rem;color:var(--muted);transition:all .15s}
+.ccard-btn:hover{background:rgba(255,255,255,.08);color:#fff}
+.ccard-btn.gen{background:rgba(79,110,247,.1);color:var(--electric);border-color:rgba(79,110,247,.3)}
+.ccard-btn.gen:hover{background:rgba(79,110,247,.2)}
+.ccard-btn.up{background:rgba(34,197,94,.1);color:var(--green);border-color:rgba(34,197,94,.3)}
+.ccard-btn.up:hover{background:rgba(34,197,94,.2)}
+.ccard-btn.done-up{background:rgba(34,197,94,.15);color:var(--green);border-color:rgba(34,197,94,.4)}
+.ccard-btn:disabled{opacity:.3;cursor:not-allowed}
+.ccard-status{font-size:.62rem;font-weight:700;padding:.14rem .45rem;border-radius:4px;text-transform:uppercase;letter-spacing:.04em}
+.cs-pending{background:rgba(138,138,170,.1);color:var(--muted)}
+.cs-generating{background:rgba(79,110,247,.15);color:var(--electric);animation:pulse 1s infinite}
+.cs-done{background:rgba(79,110,247,.12);color:#818cf8}
+.cs-uploaded{background:rgba(34,197,94,.12);color:var(--green)}
+.cs-error{background:rgba(248,113,113,.1);color:var(--red)}
 
-/* CONTENT PANELS */
-.content-panels{padding:1.5rem}
-.cpanel{display:none}
-.cpanel.active{display:block}
+.ccard-body{padding:1rem;min-height:100px;max-height:220px;overflow-y:auto;font-size:.78rem;line-height:1.65;color:var(--text)}
+.ccard-empty{color:var(--muted);font-style:italic;font-size:.8rem;text-align:center;padding:2rem 1rem;display:flex;flex-direction:column;align-items:center;gap:.5rem}
+.ccard-empty-icon{font-size:1.8rem;opacity:.3}
+.ccard-content{white-space:pre-wrap;font-family:var(--font-m);font-size:.75rem}
+.ccard-footer{padding:.6rem 1rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.ccard-chars{font-size:.65rem;color:var(--muted);font-family:var(--font-m)}
+.ccard-link{font-size:.68rem;color:var(--electric);text-decoration:underline;cursor:pointer}
 
-/* GENERATED CONTENT CARD */
-.gen-card{background:rgba(0,0,0,.2);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:1rem}
-.gen-card-head{padding:.8rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.gen-card-title{font-size:.8rem;font-weight:600;color:#fff;display:flex;align-items:center;gap:.5rem}
-.gen-card-actions{display:flex;gap:.4rem}
-.icon-btn{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid var(--border);background:transparent;font-size:.7rem;color:var(--muted);transition:all .2s}
-.icon-btn:hover{background:rgba(255,255,255,.08);color:#fff}
-.icon-btn.upload{color:var(--electric);border-color:rgba(79,110,247,.3)}
-.icon-btn.upload:hover{background:rgba(79,110,247,.12)}
-.icon-btn.uploaded{color:var(--green);border-color:rgba(34,197,94,.3);background:rgba(34,197,94,.06)}
-.gen-card-body{padding:1rem;font-size:.82rem;line-height:1.7;color:var(--text);max-height:320px;overflow-y:auto;white-space:pre-wrap;font-family:var(--font-m)}
-.gen-card-body.prose{font-family:var(--font-b);white-space:normal}
+/* PROGRESS BAR */
+.pipeline-bar{background:rgba(79,110,247,.08);border:1px solid rgba(79,110,247,.2);border-radius:12px;padding:1rem 1.2rem;margin-bottom:1.5rem;display:none;align-items:center;gap:1rem}
+.pipeline-bar.show{display:flex}
+.bar-track{flex:1;background:rgba(255,255,255,.06);border-radius:100px;height:6px;overflow:hidden}
+.bar-fill{height:100%;background:var(--electric);border-radius:100px;transition:width .3s ease;width:0%}
+.bar-text{font-size:.8rem;font-weight:600;color:#fff;white-space:nowrap}
+.bar-pct{font-size:.75rem;color:var(--muted);font-family:var(--font-m);white-space:nowrap}
 
-/* GENERATE BTN */
-.gen-btn{display:flex;align-items:center;gap:.5rem;background:var(--electric);color:#fff;border:none;padding:.55rem 1rem;border-radius:8px;font-family:var(--font-b);font-size:.8rem;font-weight:600;cursor:pointer;transition:all .2s}
-.gen-btn:hover:not(:disabled){filter:brightness(1.1)}
-.gen-btn:disabled{opacity:.4;cursor:not-allowed}
-.gen-btn.secondary{background:var(--card);color:var(--text);border:1px solid var(--border)}
-.gen-btn.secondary:hover:not(:disabled){background:var(--card2)}
+/* LOG */
+.log-box{background:rgba(0,0,0,.25);border:1px solid var(--border);border-radius:10px;padding:.8rem 1rem;margin-top:1.2rem;max-height:160px;overflow-y:auto;display:none}
+.log-box.show{display:block}
+.log-hdr{font-size:.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem;display:flex;justify-content:space-between}
+.log-line{font-size:.72rem;font-family:var(--font-m);padding:.15rem 0;display:flex;gap:.6rem}
+.log-t{color:rgba(138,138,170,.4);flex-shrink:0}
+.log-m{flex:1}
+.log-m.info{color:#7ca5f7}
+.log-m.ok{color:var(--green)}
+.log-m.err{color:var(--red)}
+.log-m.warn{color:var(--gold)}
 
-/* EMPTY STATE */
-.empty-gen{text-align:center;padding:3rem 2rem;color:var(--muted)}
-.empty-gen-icon{font-size:2.5rem;margin-bottom:.8rem;opacity:.4}
-.empty-gen-text{font-size:.85rem}
-
-/* UPLOAD PROGRESS */
-.upload-log{background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:12px;padding:1rem;margin-top:1rem;max-height:200px;overflow-y:auto;display:none}
-.upload-log.visible{display:block}
-.log-line{display:flex;align-items:flex-start;gap:.6rem;font-size:.75rem;padding:.2rem 0;font-family:var(--font-m)}
-.log-time{color:rgba(138,138,170,.5);flex-shrink:0;width:60px}
-.log-msg{flex:1}
-.log-msg.info{color:#7ca5f7}
-.log-msg.ok{color:var(--green)}
-.log-msg.err{color:var(--red)}
-.log-msg.warn{color:var(--gold)}
-
-/* PROGRESS RING */
-.progress-wrap{display:flex;align-items:center;gap:1.2rem;background:rgba(79,110,247,.06);border:1px solid rgba(79,110,247,.15);border-radius:12px;padding:1rem 1.2rem;margin-bottom:1.5rem;display:none}
-.progress-wrap.visible{display:flex}
-.progress-ring{width:44px;height:44px;flex-shrink:0}
-.progress-ring circle{fill:none;stroke-width:4}
-.progress-ring .bg{stroke:rgba(255,255,255,.08)}
-.progress-ring .fill{stroke:var(--electric);stroke-linecap:round;transition:stroke-dashoffset .4s ease;transform:rotate(-90deg);transform-origin:50% 50%}
-.progress-info{}
-.progress-label{font-size:.82rem;font-weight:600;color:#fff}
-.progress-sub{font-size:.75rem;color:var(--muted);margin-top:.2rem}
-
-/* CONTENT TYPE ICONS */
-.type-icon{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:7px;font-size:.85rem;flex-shrink:0}
-.ti-pdf{background:rgba(248,113,113,.15)}
-.ti-notes{background:rgba(79,110,247,.15)}
-.ti-slides{background:rgba(251,146,60,.15)}
-.ti-quiz{background:rgba(167,139,250,.15)}
-.ti-summary{background:rgba(45,212,191,.15)}
-.ti-video{background:rgba(248,113,113,.15)}
-.ti-image{background:rgba(34,197,94,.15)}
-.ti-doc{background:rgba(138,138,170,.15)}
-
-/* ALL JOBS TABLE */
-.jobs-table{width:100%;border-collapse:collapse}
-.jobs-table th{font-size:.68rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;padding:.5rem .8rem;text-align:left;border-bottom:1px solid var(--border)}
-.jobs-table td{padding:.6rem .8rem;font-size:.8rem;border-bottom:1px solid rgba(255,255,255,.04);vertical-align:middle}
-.jobs-table tr:hover td{background:rgba(255,255,255,.02)}
-.status-pill{display:inline-flex;align-items:center;gap:.3rem;font-size:.65rem;font-weight:700;padding:.18rem .5rem;border-radius:4px;text-transform:uppercase;letter-spacing:.04em}
-.sp-done{background:rgba(34,197,94,.1);color:var(--green)}
-.sp-running{background:rgba(79,110,247,.12);color:var(--electric);animation:pulse 1s infinite}
-.sp-pending{background:rgba(138,138,170,.1);color:var(--muted)}
-.sp-error{background:rgba(248,113,113,.1);color:var(--red)}
+/* NOTICE */
+.notice{background:rgba(245,200,66,.07);border:1px solid rgba(245,200,66,.2);border-radius:10px;padding:.8rem 1rem;font-size:.8rem;color:var(--gold);margin-bottom:1.2rem;display:flex;align-items:center;gap:.6rem}
 
 /* TOAST */
-.toast{position:fixed;bottom:2rem;right:2rem;background:#1e2448;border:1px solid rgba(79,110,247,.4);border-radius:12px;padding:.9rem 1.4rem;color:#fff;font-size:.85rem;font-weight:500;z-index:1000;transform:translateY(80px);opacity:0;transition:all .3s;max-width:340px;line-height:1.4}
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:#1e2448;border:1px solid rgba(79,110,247,.4);border-radius:12px;padding:.85rem 1.2rem;color:#fff;font-size:.85rem;font-weight:500;z-index:9999;transform:translateY(60px);opacity:0;transition:all .25s;max-width:320px;line-height:1.4}
 .toast.show{transform:translateY(0);opacity:1}
-.toast.ok{border-color:rgba(34,197,94,.4)}
-.toast.err{border-color:rgba(248,113,113,.4)}
+.toast.ok{border-color:rgba(34,197,94,.5)}
+.toast.err{border-color:rgba(248,113,113,.5)}
 
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 @keyframes spin{to{transform:rotate(360deg)}}
-.spin{animation:spin 1s linear infinite;display:inline-block}
+.spin{display:inline-block;animation:spin .8s linear infinite}
 
-@media(max-width:900px){.app{grid-template-columns:1fr}.sidebar{position:static;height:auto}}
+/* JOBS TAB */
+.jobs-table{width:100%;border-collapse:collapse}
+.jobs-table th{font-size:.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;padding:.5rem .8rem;text-align:left;border-bottom:1px solid var(--border)}
+.jobs-table td{padding:.55rem .8rem;font-size:.78rem;border-bottom:1px solid rgba(255,255,255,.03);vertical-align:middle}
+
+@media(max-width:860px){.app{grid-template-columns:1fr}.sidebar{position:static;height:auto}.ctype-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
+
 <div class="app">
 
-<!-- SIDEBAR -->
+<!-- ── SIDEBAR ── -->
 <aside class="sidebar">
   <div class="sb-head">
     <div class="sb-logo">Learn<span>Mind</span>.AI</div>
-    <div class="sb-sub">🏭 Content Factory</div>
+    <div class="sb-tag">🏭 Content Factory</div>
   </div>
 
-  <div class="sb-section">
-    <div class="sb-label">Curriculum</div>
-    <div class="tree" id="curriculumTree"></div>
-  </div>
+  <div class="sb-label">Curriculum</div>
+  <div class="tree" id="tree"></div>
 
   <div class="sb-stats">
-    <div class="sb-stat"><div class="sb-stat-n" id="statLessons">0</div><div class="sb-stat-l">Lessons</div></div>
-    <div class="sb-stat"><div class="sb-stat-n" id="statGenerated">0</div><div class="sb-stat-l">Generated</div></div>
-    <div class="sb-stat"><div class="sb-stat-n" id="statUploaded">0</div><div class="sb-stat-l">Uploaded</div></div>
-    <div class="sb-stat"><div class="sb-stat-n" id="statFiles">0</div><div class="sb-stat-l">Total Files</div></div>
+    <div class="sb-stat"><div class="sb-stat-n" id="sGen">0</div><div class="sb-stat-l">Generated</div></div>
+    <div class="sb-stat"><div class="sb-stat-n" id="sUp">0</div><div class="sb-stat-l">Uploaded</div></div>
+    <div class="sb-stat"><div class="sb-stat-n" id="sLess">48</div><div class="sb-stat-l">Lessons</div></div>
+    <div class="sb-stat"><div class="sb-stat-n" id="sTypes">6</div><div class="sb-stat-l">Types</div></div>
   </div>
 
-  <button class="sb-run-btn" id="runAllBtn" onclick="runFullPipeline()">
-    ▶ Run Full Pipeline
-  </button>
+  <button class="sb-run-btn" id="runBtn" onclick="runPipeline()">▶ Generate + Upload All</button>
 </aside>
 
-<!-- MAIN -->
+<!-- ── MAIN ── -->
 <main class="main">
-  <div class="main-head">
+  <div class="top-bar">
     <div>
-      <h1 class="main-title">Content <em>Factory</em></h1>
-      <p class="main-desc">AI generates course materials by subject & lesson — auto-uploaded to Firebase</p>
+      <div class="top-title">Content <em>Factory</em></div>
     </div>
-    <div class="head-actions">
-      <div class="fb-pill no" id="fbPill"><div class="fb-dot"></div>Firebase</div>
-      <button class="btn-sm btn-outline" onclick="showTab('jobs')">📋 All Jobs</button>
-      <button class="btn-sm btn-gold" onclick="showTab('config')">⚙️ Configure</button>
+    <div class="top-right">
+      <div class="fb-badge no" id="fbBadge"><div class="fb-dot"></div><span id="fbText">Firebase</span></div>
+      <button class="tbtn tbtn-outline" onclick="showView('jobs')">📋 Jobs</button>
+      <button class="tbtn tbtn-gold" onclick="showView('main')">🏠 Workspace</button>
     </div>
   </div>
 
-  <div class="content-area">
+  <div class="content">
 
-    <!-- PROGRESS BAR -->
-    <div class="progress-wrap" id="pipelineProgress">
-      <svg class="progress-ring" viewBox="0 0 44 44">
-        <circle class="bg" cx="22" cy="22" r="18"/>
-        <circle class="fill" id="progressRingFill" cx="22" cy="22" r="18" stroke-dasharray="113" stroke-dashoffset="113"/>
-      </svg>
-      <div class="progress-info">
-        <div class="progress-label" id="progressLabel">Running pipeline...</div>
-        <div class="progress-sub" id="progressSub">Generating content with Claude AI</div>
+    <!-- WORKSPACE VIEW -->
+    <div id="view-main">
+
+      <!-- NOTICE when no lesson selected -->
+      <div class="notice" id="noLesson">
+        👈 Select a subject from the sidebar to expand lessons, then click any lesson to start generating content.
       </div>
+
+      <!-- CONFIG -->
+      <div class="cfg-row">
+        <div class="cfg-box">
+          <div class="cfg-lbl">Grade Level</div>
+          <select class="cfg-sel" id="cfgGrade" onchange="updateBanner()">
+            <option value="2nd-4th Grade">2nd–4th Grade</option>
+            <option value="5th-6th Grade">5th–6th Grade</option>
+            <option value="7th-8th Grade">7th–8th Grade</option>
+            <option value="9th-10th Grade" selected>9th–10th Grade</option>
+            <option value="11th-12th Grade">11th–12th Grade (AP)</option>
+          </select>
+        </div>
+        <div class="cfg-box">
+          <div class="cfg-lbl">Difficulty</div>
+          <select class="cfg-sel" id="cfgDepth">
+            <option value="beginner">Beginner</option>
+            <option value="standard" selected>Standard</option>
+            <option value="advanced">Advanced</option>
+          </select>
+        </div>
+        <div class="cfg-box">
+          <div class="cfg-lbl">Writing Style</div>
+          <select class="cfg-sel" id="cfgStyle">
+            <option value="simple and clear">Simple & Clear</option>
+            <option value="engaging and story-driven" selected>Engaging & Story-driven</option>
+            <option value="academic and formal">Academic & Formal</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- LESSON BANNER -->
+      <div class="lesson-banner" id="lessonBanner" style="display:none">
+        <div class="lb-info">
+          <div class="lb-subject" id="banSubject">—</div>
+          <div class="lb-lesson" id="banLesson">—</div>
+          <div class="lb-grade" id="banGrade">—</div>
+        </div>
+        <div class="lb-actions">
+          <button class="act-btn act-btn-secondary" onclick="generateAll()">✨ Generate All 6</button>
+          <button class="act-btn act-btn-green" onclick="uploadAll()">☁️ Upload All to Firebase</button>
+          <button class="act-btn act-btn-primary" onclick="runPipeline()">▶ Generate + Upload</button>
+        </div>
+      </div>
+
+      <!-- PIPELINE PROGRESS -->
+      <div class="pipeline-bar" id="pBar">
+        <div class="bar-text" id="pLabel">Running...</div>
+        <div class="bar-track"><div class="bar-fill" id="pFill"></div></div>
+        <div class="bar-pct" id="pPct">0%</div>
+      </div>
+
+      <!-- CONTENT CARDS GRID -->
+      <div class="ctype-grid" id="ctypeGrid"></div>
+
+      <!-- LOG -->
+      <div class="log-box" id="logBox">
+        <div class="log-hdr"><span>Pipeline Log</span><span onclick="clearLog()" style="cursor:pointer;color:var(--electric)">Clear</span></div>
+        <div id="logLines"></div>
+      </div>
+
     </div>
 
-    <!-- TAB: WORKSPACE -->
-    <div id="tab-workspace">
-
-      <!-- CONFIG PANEL -->
-      <div class="config-panel">
-        <div class="config-title">⚙️ Generation Settings</div>
-        <div class="config-grid">
-          <div class="cfg-group">
-            <div class="cfg-label">Grade Level</div>
-            <select class="cfg-select" id="cfgGrade">
-              <option value="2nd-4th">2nd – 4th Grade (Elementary)</option>
-              <option value="5th-6th">5th – 6th Grade (Upper Elementary)</option>
-              <option value="7th-8th">7th – 8th Grade (Middle School)</option>
-              <option value="9th-10th" selected>9th – 10th Grade (High School)</option>
-              <option value="11th-12th">11th – 12th Grade (AP Level)</option>
-            </select>
-          </div>
-          <div class="cfg-group">
-            <div class="cfg-label">Content Depth</div>
-            <select class="cfg-select" id="cfgDepth">
-              <option value="introductory">Introductory</option>
-              <option value="standard" selected>Standard</option>
-              <option value="advanced">Advanced / AP</option>
-            </select>
-          </div>
-          <div class="cfg-group">
-            <div class="cfg-label">Language Style</div>
-            <select class="cfg-select" id="cfgStyle">
-              <option value="simple">Simple & Clear</option>
-              <option value="engaging" selected>Engaging & Story-driven</option>
-              <option value="academic">Academic</option>
-            </select>
-          </div>
-          <div class="cfg-group">
-            <div class="cfg-label">Content Types to Generate</div>
-            <select class="cfg-select" id="cfgTypes">
-              <option value="all" selected>All Types</option>
-              <option value="notes-quiz">Notes + Quiz Only</option>
-              <option value="slides-notes">Slides + Notes Only</option>
-              <option value="full">Full Pack (all 6)</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <!-- WORKSPACE -->
-      <div class="workspace" id="workspace">
-        <div class="ws-header">
-          <div class="ws-lesson-info">
-            <div class="ws-subject" id="wsSubject">Select a lesson from the sidebar</div>
-            <div class="ws-lesson-name" id="wsLessonName">Choose a subject and lesson to begin</div>
-            <div class="ws-grade" id="wsGrade">Configure grade level above</div>
-          </div>
-          <div class="ws-actions">
-            <button class="gen-btn secondary" id="btnGenAll" onclick="generateAllTypes()" disabled>
-              ✨ Generate All
-            </button>
-            <button class="gen-btn" id="btnUploadAll" onclick="uploadAllGenerated()" disabled>
-              ☁️ Upload All to Firebase
-            </button>
-          </div>
-        </div>
-
-        <!-- CONTENT TYPE TABS -->
-        <div class="content-tabs">
-          <div class="ctab active" onclick="switchCTab('notes',this)">📝 Notes<span class="ctab-status" id="cs-notes"></span></div>
-          <div class="ctab" onclick="switchCTab('slides',this)">📊 Slides<span class="ctab-status" id="cs-slides"></span></div>
-          <div class="ctab" onclick="switchCTab('quiz',this)">❓ Quiz<span class="ctab-status" id="cs-quiz"></span></div>
-          <div class="ctab" onclick="switchCTab('summary',this)">📋 Summary<span class="ctab-status" id="cs-summary"></span></div>
-          <div class="ctab" onclick="switchCTab('script',this)">🎬 Video Script<span class="ctab-status" id="cs-script"></span></div>
-          <div class="ctab" onclick="switchCTab('worksheet',this)">📄 Worksheet<span class="ctab-status" id="cs-worksheet"></span></div>
-        </div>
-
-        <!-- PANELS -->
-        <div class="content-panels">
-
-          <!-- NOTES -->
-          <div class="cpanel active" id="cp-notes">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem">
-              <div style="font-size:.8rem;color:var(--muted)">Comprehensive study notes with key concepts, explanations and examples</div>
-              <button class="gen-btn" id="gen-notes" onclick="generateContent('notes')" disabled>✨ Generate Notes</button>
-            </div>
-            <div id="out-notes"><div class="empty-gen"><div class="empty-gen-icon">📝</div><div class="empty-gen-text">Select a lesson and click Generate Notes</div></div></div>
-          </div>
-
-          <!-- SLIDES -->
-          <div class="cpanel" id="cp-slides">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem">
-              <div style="font-size:.8rem;color:var(--muted)">Structured slide deck outline with titles, bullets and presenter notes</div>
-              <button class="gen-btn" id="gen-slides" onclick="generateContent('slides')" disabled>✨ Generate Slides</button>
-            </div>
-            <div id="out-slides"><div class="empty-gen"><div class="empty-gen-icon">📊</div><div class="empty-gen-text">Select a lesson and click Generate Slides</div></div></div>
-          </div>
-
-          <!-- QUIZ -->
-          <div class="cpanel" id="cp-quiz">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem">
-              <div style="font-size:.8rem;color:var(--muted)">20 practice questions with multiple choice options and answer key</div>
-              <button class="gen-btn" id="gen-quiz" onclick="generateContent('quiz')" disabled>✨ Generate Quiz</button>
-            </div>
-            <div id="out-quiz"><div class="empty-gen"><div class="empty-gen-icon">❓</div><div class="empty-gen-text">Select a lesson and click Generate Quiz</div></div></div>
-          </div>
-
-          <!-- SUMMARY -->
-          <div class="cpanel" id="cp-summary">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem">
-              <div style="font-size:.8rem;color:var(--muted)">Quick reference cheat sheet with key terms, formulas and facts</div>
-              <button class="gen-btn" id="gen-summary" onclick="generateContent('summary')" disabled>✨ Generate Summary</button>
-            </div>
-            <div id="out-summary"><div class="empty-gen"><div class="empty-gen-icon">📋</div><div class="empty-gen-text">Select a lesson and click Generate Summary</div></div></div>
-          </div>
-
-          <!-- VIDEO SCRIPT -->
-          <div class="cpanel" id="cp-script">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem">
-              <div style="font-size:.8rem;color:var(--muted)">Full video lecture script with hooks, explanations and transitions</div>
-              <button class="gen-btn" id="gen-script" onclick="generateContent('script')" disabled>✨ Generate Script</button>
-            </div>
-            <div id="out-script"><div class="empty-gen"><div class="empty-gen-icon">🎬</div><div class="empty-gen-text">Select a lesson and click Generate Script</div></div></div>
-          </div>
-
-          <!-- WORKSHEET -->
-          <div class="cpanel" id="cp-worksheet">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem">
-              <div style="font-size:.8rem;color:var(--muted)">Practice worksheet with problems, fill-in-blanks and short answers</div>
-              <button class="gen-btn" id="gen-worksheet" onclick="generateContent('worksheet')" disabled>✨ Generate Worksheet</button>
-            </div>
-            <div id="out-worksheet"><div class="empty-gen"><div class="empty-gen-icon">📄</div><div class="empty-gen-text">Select a lesson and click Generate Worksheet</div></div></div>
-          </div>
-
-        </div>
-
-        <!-- UPLOAD LOG -->
-        <div style="padding:0 1.5rem 1.5rem">
-          <div class="upload-log" id="uploadLog"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- TAB: ALL JOBS -->
-    <div id="tab-jobs" style="display:none">
-      <div style="font-family:var(--font-d);font-size:1.3rem;font-weight:700;color:#fff;margin-bottom:1.5rem">All <em style="font-style:italic;color:var(--gold)">Generated Content</em></div>
-      <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden">
-        <table class="jobs-table" id="jobsTable">
+    <!-- JOBS VIEW -->
+    <div id="view-jobs" style="display:none">
+      <div style="font-family:var(--font-d);font-size:1.3rem;font-weight:700;color:#fff;margin-bottom:1.2rem">All <em style="font-style:italic;color:var(--gold)">Generated Jobs</em></div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden">
+        <table class="jobs-table">
           <thead><tr>
-            <th>Subject</th><th>Lesson</th><th>Type</th><th>Grade</th><th>Status</th><th>Firebase</th><th>Actions</th>
+            <th>Subject</th><th>Lesson</th><th>Type</th><th>Grade</th><th>Status</th><th>Firebase Link</th>
           </tr></thead>
           <tbody id="jobsBody">
-            <tr><td colspan="7" style="text-align:center;color:var(--muted);padding:2rem;font-size:.85rem">No content generated yet</td></tr>
+            <tr><td colspan="6" style="text-align:center;color:var(--muted);padding:2.5rem;font-size:.85rem">No jobs yet — select a lesson and generate content</td></tr>
           </tbody>
         </table>
-      </div>
-    </div>
-
-    <!-- TAB: CONFIG -->
-    <div id="tab-config" style="display:none">
-      <div style="font-family:var(--font-d);font-size:1.3rem;font-weight:700;color:#fff;margin-bottom:1.5rem">Firebase <em style="font-style:italic;color:var(--gold)">Connection</em></div>
-      <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.5rem">
-        <p style="color:var(--muted);font-size:.85rem;margin-bottom:1rem">This tool reads your Firebase config from localStorage (saved by firebase-setup.html). If not connected, go to the setup page first.</p>
-        <div id="fbConfigStatus" style="font-size:.85rem;color:var(--muted)">Checking...</div>
-        <div style="margin-top:1rem;display:flex;gap:.8rem;flex-wrap:wrap">
-          <a href="firebase-setup.html" class="btn-sm btn-outline" style="text-decoration:none;display:inline-flex;align-items:center;gap:.4rem">🔥 Go to Firebase Setup</a>
-          <a href="admin-portal.html" class="btn-sm btn-outline" style="text-decoration:none;display:inline-flex;align-items:center;gap:.4rem">⚙️ Go to Admin Portal</a>
-        </div>
       </div>
     </div>
 
@@ -425,14 +298,15 @@ body{font-family:var(--font-b);background:var(--navy);color:var(--text);min-heig
 
 <div class="toast" id="toast"></div>
 
-<script type="module">
-import { initializeApp }  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import { getFirestore, collection, addDoc }   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-import { getStorage, ref, uploadString, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js';
+<!-- Firebase SDK (non-module, compat version for global access) -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
 
-// ── CURRICULUM ────────────────────────────────────────────────────────────────
-const CURRICULUM = [
+<script>
+// ── CURRICULUM DATA ───────────────────────────────────────────────────────────
+var CURRICULUM = [
   { id:'math', name:'Mathematics', icon:'📐', lessons:[
     'Introduction to Algebra','Linear Equations','Quadratic Equations',
     'Geometry Basics','Trigonometry','Statistics & Probability',
@@ -440,156 +314,193 @@ const CURRICULUM = [
   ]},
   { id:'science', name:'Science', icon:'🔬', lessons:[
     'Cell Biology','DNA & Genetics','Human Body Systems',
-    'Photosynthesis','Ecosystems','Chemical Reactions',
+    'Photosynthesis & Respiration','Ecosystems & Food Chains','Chemical Reactions',
     'Newton\'s Laws of Motion','Electricity & Magnetism'
   ]},
   { id:'history', name:'History', icon:'📜', lessons:[
-    'American Revolution','Civil War','World War I',
-    'World War II','Cold War','Civil Rights Movement',
+    'American Revolution','Civil War & Reconstruction','World War I',
+    'World War II','The Cold War','Civil Rights Movement',
     'Ancient Civilizations','Industrial Revolution'
   ]},
   { id:'english', name:'English', icon:'✍️', lessons:[
     'Essay Writing Basics','Grammar & Punctuation','Literary Analysis',
-    'Poetry & Prose','Persuasive Writing','Research Skills',
+    'Poetry & Prose','Persuasive Writing','Research & Citation',
     'Vocabulary Building','Reading Comprehension'
   ]},
   { id:'satprep', name:'SAT Prep', icon:'📊', lessons:[
     'SAT Math — Algebra','SAT Math — Data Analysis',
-    'SAT Reading — Main Idea','SAT Writing — Grammar',
-    'SAT Essay Strategies','Time Management Tips',
+    'SAT Reading — Main Idea','SAT Writing — Grammar Rules',
+    'SAT Essay Strategies','Time Management & Test Tips',
     'Full Practice Test 1','Full Practice Test 2'
   ]},
   { id:'cs', name:'Computer Science', icon:'💻', lessons:[
     'Introduction to Programming','Variables & Data Types',
     'Loops & Conditionals','Functions & Methods',
     'Arrays & Lists','Object Oriented Programming',
-    'Web Basics (HTML/CSS)','Algorithms & Problem Solving'
-  ]},
+    'Web Basics — HTML & CSS','Algorithms & Problem Solving'
+  ]}
+];
+
+var TYPES = [
+  { id:'notes',     label:'Study Notes',   icon:'📝', desc:'Comprehensive notes with objectives, vocab, and examples' },
+  { id:'slides',    label:'Slide Deck',    icon:'📊', desc:'12-slide presentation outline with speaker notes' },
+  { id:'quiz',      label:'Practice Quiz', icon:'❓', desc:'20 questions — MCQ, True/False, Short Answer + Key' },
+  { id:'summary',   label:'Quick Summary', icon:'📋', desc:'Cheat sheet with key terms, facts and memory tricks' },
+  { id:'script',    label:'Video Script',  icon:'🎬', desc:'Full lecture script for AI avatar or teacher recording' },
+  { id:'worksheet', label:'Worksheet',     icon:'📄', desc:'Practice problems with teacher answer key' }
 ];
 
 // ── STATE ─────────────────────────────────────────────────────────────────────
-let FB=null, AUTH=null, DB=null, STORE=null, fbReady=false;
-let currentSubject=null, currentLesson=null;
-let generated={};  // key: `${subjectId}_${lessonIdx}_${type}` → content
-let uploaded={};   // same key → {url, docId}
-let jobs=[];
-let activeCTab='notes';
+var FB_APP = null, FB_AUTH = null, FB_DB = null, FB_STORE = null, fbReady = false;
+var curSubject = null, curLesson = null;
+var generated = {};   // key → content string
+var uploaded  = {};   // key → { url, docId }
+var jobs      = [];
 
-const CONTENT_TYPES = ['notes','slides','quiz','summary','script','worksheet'];
+function genKey(type) {
+  if (!curSubject || !curLesson) return null;
+  return curSubject.id + '__' + curLesson.idx + '__' + type;
+}
 
 // ── FIREBASE ──────────────────────────────────────────────────────────────────
-function initFB() {
-  const cfg = JSON.parse(localStorage.getItem('lm_fb')||'null');
-  if (!cfg?.apiKey || cfg.apiKey==='YOUR_API_KEY') {
-    updateFbPill(false);
-    document.getElementById('fbConfigStatus').innerHTML =
-      '❌ Firebase not configured. <a href="firebase-setup.html" style="color:var(--electric)">Go to setup →</a>';
-    return;
+function initFirebase() {
+  var cfg = null;
+  try { cfg = JSON.parse(localStorage.getItem('lm_fb') || 'null'); } catch(e){}
+  if (!cfg || !cfg.apiKey || cfg.apiKey === 'YOUR_API_KEY') {
+    setFbBadge(false); return;
   }
   try {
-    const app = initializeApp(cfg,'content-factory');
-    AUTH  = getAuth(app);
-    DB    = getFirestore(app);
-    STORE = getStorage(app);
-    fbReady = true;
-    updateFbPill(true);
-    document.getElementById('fbConfigStatus').innerHTML =
-      '✅ Firebase connected — Project: <strong style="color:#fff">'+cfg.projectId+'</strong>';
-    autoSignIn();
-  } catch(e) { console.error(e); updateFbPill(false); }
+    // Check if already initialized
+    try { firebase.app('cf'); }
+    catch(e) { firebase.initializeApp(cfg, 'cf'); }
+    FB_APP   = firebase.app('cf');
+    FB_AUTH  = firebase.auth(FB_APP);
+    FB_DB    = firebase.firestore(FB_APP);
+    FB_STORE = firebase.storage(FB_APP);
+    fbReady  = true;
+    setFbBadge(true);
+    // Auto sign in
+    var admin = {};
+    try { admin = JSON.parse(localStorage.getItem('lm_admin') || '{}'); } catch(e){}
+    if (admin.email && admin.pass) {
+      FB_AUTH.signInWithEmailAndPassword(admin.email, admin.pass)
+        .then(function(){ log('ok','Firebase signed in as '+admin.email); })
+        .catch(function(e){ log('warn','Auto sign-in: '+e.message); });
+    }
+  } catch(e) {
+    console.error('Firebase init:', e);
+    setFbBadge(false);
+  }
 }
 
-async function autoSignIn() {
-  const admin = JSON.parse(localStorage.getItem('lm_admin')||'{}');
-  if (!admin.email || !admin.pass) return;
-  try { await signInWithEmailAndPassword(AUTH, admin.email, admin.pass); }
-  catch(e) { console.warn('Auto sign-in failed:', e.message); }
-}
-
-function updateFbPill(ok) {
-  const el = document.getElementById('fbPill');
-  el.className = 'fb-pill '+(ok?'ok':'no');
-  el.innerHTML = `<div class="fb-dot"></div>${ok?'🔥 Firebase':'❌ Firebase'}`;
+function setFbBadge(ok) {
+  var el = document.getElementById('fbBadge');
+  el.className = 'fb-badge ' + (ok ? 'ok' : 'no');
+  document.getElementById('fbText').textContent = ok ? '🔥 Firebase Connected' : '❌ Firebase Not Connected';
 }
 
 // ── CURRICULUM TREE ───────────────────────────────────────────────────────────
 function renderTree() {
-  const tree = document.getElementById('curriculumTree');
-  tree.innerHTML = CURRICULUM.map(s => `
-    <div class="tree-subject" id="ts-${s.id}">
-      <div class="tree-subject-header" onclick="toggleSubject('${s.id}')">
-        <span class="tree-subject-icon">${s.icon}</span>
-        <span class="tree-subject-name">${s.name}</span>
-        <span class="tree-subject-count">${s.lessons.length}</span>
-        <span class="tree-chevron">▶</span>
-      </div>
-      <div class="tree-lessons">
-        ${s.lessons.map((l,i) => `
-          <div class="tree-lesson" id="tl-${s.id}-${i}" onclick="selectLesson('${s.id}',${i})">
-            <div class="tree-lesson-dot"></div>
-            ${l}
-          </div>`).join('')}
-      </div>
-    </div>`).join('');
-  updateStats();
+  var html = '';
+  CURRICULUM.forEach(function(s) {
+    html += '<div class="tree-subj" id="ts-'+s.id+'">';
+    html += '<div class="tree-subj-hdr" onclick="toggleSubj(\''+s.id+'\')">';
+    html += '<span class="tree-subj-icon">'+s.icon+'</span>';
+    html += '<span class="tree-subj-name">'+s.name+'</span>';
+    html += '<span class="tree-subj-cnt">'+s.lessons.length+'</span>';
+    html += '<span class="tree-arrow">▶</span>';
+    html += '</div>';
+    html += '<div class="tree-lessons">';
+    s.lessons.forEach(function(l, i) {
+      html += '<div class="tree-lesson" id="tl-'+s.id+'-'+i+'" onclick="selectLesson(\''+s.id+'\','+i+')">';
+      html += '<div class="tree-lesson-dot"></div>'+l;
+      html += '</div>';
+    });
+    html += '</div></div>';
+  });
+  document.getElementById('tree').innerHTML = html;
 }
 
-function toggleSubject(id) {
-  const el = document.getElementById('ts-'+id);
+function toggleSubj(id) {
+  var el = document.getElementById('ts-'+id);
   el.classList.toggle('open');
 }
 
 function selectLesson(subjectId, lessonIdx) {
-  // Clear active states
-  document.querySelectorAll('.tree-lesson').forEach(el => el.classList.remove('active'));
-  document.getElementById(`tl-${subjectId}-${lessonIdx}`).classList.add('active');
+  // Update tree selection
+  document.querySelectorAll('.tree-lesson').forEach(function(el) { el.classList.remove('sel'); });
+  var tlEl = document.getElementById('tl-'+subjectId+'-'+lessonIdx);
+  if (tlEl) tlEl.classList.add('sel');
 
-  const subject = CURRICULUM.find(s => s.id===subjectId);
-  currentSubject = subject;
-  currentLesson  = { idx: lessonIdx, name: subject.lessons[lessonIdx] };
+  curSubject = CURRICULUM.find(function(s){ return s.id===subjectId; });
+  curLesson  = { idx: lessonIdx, name: curSubject.lessons[lessonIdx] };
 
-  // Update workspace header
-  document.getElementById('wsSubject').textContent   = `${subject.icon} ${subject.name}`;
-  document.getElementById('wsLessonName').textContent = currentLesson.name;
-  document.getElementById('wsGrade').textContent      = getGradeLabel() + ' • ' + getCfg().depth + ' level';
+  // Hide notice, show banner
+  document.getElementById('noLesson').style.display = 'none';
+  document.getElementById('lessonBanner').style.display = 'flex';
+  updateBanner();
 
-  // Enable buttons
-  document.getElementById('btnGenAll').disabled    = false;
-  document.getElementById('btnUploadAll').disabled = false;
-  CONTENT_TYPES.forEach(t => { document.getElementById('gen-'+t).disabled = false; });
+  // Render content cards
+  renderCards();
+  log('info', 'Selected: '+curSubject.name+' → '+curLesson.name);
+}
 
-  // Load any existing generated content
-  CONTENT_TYPES.forEach(t => {
-    const key = genKey(t);
-    if (generated[key]) showGenerated(t, generated[key], !!uploaded[key]);
-    else clearPanel(t);
-    updateTabStatus(t);
+function updateBanner() {
+  if (!curSubject) return;
+  document.getElementById('banSubject').textContent = curSubject.icon+' '+curSubject.name;
+  document.getElementById('banLesson').textContent  = curLesson ? curLesson.name : '—';
+  document.getElementById('banGrade').textContent   = document.getElementById('cfgGrade').value + ' • ' + document.getElementById('cfgDepth').value;
+}
+
+// ── RENDER CONTENT CARDS ──────────────────────────────────────────────────────
+function renderCards() {
+  var html = '';
+  TYPES.forEach(function(t) {
+    var key    = genKey(t.id);
+    var hasGen = key && generated[key];
+    var hasUp  = key && uploaded[key];
+    var status = hasUp ? 'uploaded' : hasGen ? 'done' : 'pending';
+    var statusLabel = hasUp ? 'Uploaded ✓' : hasGen ? 'Generated' : 'Pending';
+    var statusClass = hasUp ? 'cs-uploaded' : hasGen ? 'cs-done' : 'cs-pending';
+
+    html += '<div class="ccard '+status+'" id="cc-'+t.id+'">';
+    // Header
+    html += '<div class="ccard-head">';
+    html += '<div class="ccard-title"><span class="ccard-icon">'+t.icon+'</span>'+t.label+'</div>';
+    html += '<div class="ccard-btns">';
+    html += '<span class="ccard-status '+statusClass+'">'+statusLabel+'</span>';
+    html += '<button class="ccard-btn gen" title="Generate" onclick="generateOne(\''+t.id+'\')" id="genbtn-'+t.id+'">✨</button>';
+    if (hasGen) {
+      html += '<button class="ccard-btn" title="Copy" onclick="copyOne(\''+t.id+'\')">📋</button>';
+      html += '<button class="ccard-btn up" title="Upload to Firebase" onclick="uploadOne(\''+t.id+'\')">☁️</button>';
+    }
+    if (hasUp) {
+      html += '<a href="'+uploaded[key].url+'" target="_blank"><button class="ccard-btn done-up" title="View in Firebase">🔗</button></a>';
+    }
+    html += '</div></div>';
+    // Body
+    html += '<div class="ccard-body">';
+    if (hasGen) {
+      html += '<div class="ccard-content">'+escHTML(generated[key].substring(0,400))+(generated[key].length>400?'\n\n... ['+Math.round(generated[key].length/1000)+'K chars total — copy to see full content]':'')+'</div>';
+    } else {
+      html += '<div class="ccard-empty"><div class="ccard-empty-icon">'+t.icon+'</div><div>'+t.desc+'</div><div style="font-size:.72rem;margin-top:.3rem;color:rgba(138,138,170,.6)">Click ✨ to generate</div></div>';
+    }
+    html += '</div>';
+    // Footer
+    if (hasGen) {
+      html += '<div class="ccard-footer">';
+      html += '<span class="ccard-chars">'+generated[key].length.toLocaleString()+' characters</span>';
+      if (hasUp) { html += '<span class="ccard-link" onclick="navigator.clipboard.writeText(\''+uploaded[key].url+'\');toast(\'URL copied!\',\'ok\')">Copy Firebase URL</span>'; }
+      html += '</div>';
+    }
+    html += '</div>';
   });
-
-  addLog('info', `Selected: ${subject.name} → ${currentLesson.name}`);
-}
-
-function genKey(type) {
-  if (!currentSubject||!currentLesson) return null;
-  return `${currentSubject.id}_${currentLesson.idx}_${type}`;
-}
-
-function getCfg() {
-  return {
-    grade: document.getElementById('cfgGrade').value,
-    depth: document.getElementById('cfgDepth').value,
-    style: document.getElementById('cfgStyle').value,
-  };
-}
-
-function getGradeLabel() {
-  const map = {'2nd-4th':'2nd–4th Grade','5th-6th':'5th–6th Grade','7th-8th':'7th–8th Grade','9th-10th':'9th–10th Grade','11th-12th':'11th–12th Grade'};
-  return map[getCfg().grade] || getCfg().grade;
+  document.getElementById('ctypeGrid').innerHTML = html;
 }
 
 // ── CLAUDE API ────────────────────────────────────────────────────────────────
-async function callClaude(prompt) {
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
+function callClaude(prompt, callback) {
+  fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -597,465 +508,379 @@ async function callClaude(prompt) {
       max_tokens: 1000,
       messages: [{ role:'user', content: prompt }]
     })
-  });
-  if (!res.ok) { const e=await res.json(); throw new Error(e?.error?.message||'API error'); }
-  const data = await res.json();
-  return data.content?.find(b=>b.type==='text')?.text || '';
+  })
+  .then(function(res) {
+    if (!res.ok) { return res.json().then(function(e){ throw new Error(e?.error?.message||'API error '+res.status); }); }
+    return res.json();
+  })
+  .then(function(data) {
+    var text = '';
+    if (data.content) {
+      data.content.forEach(function(b){ if(b.type==='text') text += b.text; });
+    }
+    callback(null, text);
+  })
+  .catch(function(e){ callback(e, null); });
 }
 
 // ── PROMPTS ───────────────────────────────────────────────────────────────────
 function buildPrompt(type) {
-  const cfg = getCfg();
-  const grade = getGradeLabel();
-  const subj  = currentSubject.name;
-  const lesson = currentLesson.name;
+  var grade  = document.getElementById('cfgGrade').value;
+  var depth  = document.getElementById('cfgDepth').value;
+  var style  = document.getElementById('cfgStyle').value;
+  var subj   = curSubject.name;
+  var lesson = curLesson.name;
+  var ctx    = 'Subject: '+subj+' | Lesson: '+lesson+' | Grade: '+grade+' | Level: '+depth+' | Style: '+style;
 
-  const base = `Subject: ${subj} | Lesson: ${lesson} | Grade: ${grade} | Level: ${cfg.depth} | Style: ${cfg.style}`;
+  var prompts = {
+    notes: 'Create comprehensive study notes for a K-12 student.\n'+ctx+'\n\nWrite detailed lesson notes with these sections:\n1. LEARNING OBJECTIVES (3-4 bullet points)\n2. KEY VOCABULARY (8 terms with clear definitions)\n3. MAIN CONCEPTS (3 sections with explanations and examples)\n4. REAL-WORLD CONNECTIONS (2 examples students can relate to)\n5. KEY FACTS TO REMEMBER (5 bullet points)\n6. COMMON MISTAKES TO AVOID (3 points)\n7. PRACTICE QUESTIONS (3 questions to test understanding)\n\nUse clear headings, bullet points, and '+style+' language for '+grade+' students.',
 
-  const prompts = {
-    notes: `Create comprehensive study notes for a K-12 student.
-${base}
+    slides: 'Create a 12-slide presentation outline.\n'+ctx+'\n\nFormat exactly like this for each slide:\n\nSLIDE 1: [Title Slide]\nTitle: [lesson name]\nSubtitle: [subject] | '+grade+'\n\nSLIDE 2: [Learning Objectives]\nContent: • objective 1 • objective 2 • objective 3\n\nSLIDES 3-10: [Core Content - one concept per slide]\nTitle: [concept name]\nContent: • key point 1 • key point 2 • key point 3 • key point 4\nSpeaker Notes: [what the teacher says - 2-3 sentences]\n\nSLIDE 11: [Key Takeaways]\nContent: • takeaway 1 • takeaway 2 • takeaway 3\n\nSLIDE 12: [Quiz Time]\nContent: 3 quick questions for students\n\nMake it engaging for '+grade+' students.',
 
-Write detailed lesson notes including:
-1. Learning Objectives (3-4 bullet points)
-2. Key Vocabulary (8-10 terms with definitions)
-3. Main Concepts (3-4 sections with clear explanations)
-4. Real-world Examples and Analogies
-5. Important Facts to Remember
-6. Common Mistakes to Avoid
-7. Connections to Other Topics
+    quiz: 'Create a complete practice quiz.\n'+ctx+'\n\n--- SECTION A: MULTIPLE CHOICE (10 questions) ---\nFor each question show 4 options (A, B, C, D) and mark correct with *\n\nQ1. [question]\nA) option  B) option  C) *correct  D) option\n\n[Continue Q2-Q10]\n\n--- SECTION B: TRUE OR FALSE (5 questions) ---\nQ11. [statement] [Answer: True/False]\n[Continue Q12-Q15]\n\n--- SECTION C: SHORT ANSWER (5 questions) ---\nQ16. [question]\nAnswer: [expected answer]\n[Continue Q17-Q20]\n\n--- ANSWER KEY ---\nList all 20 answers clearly.\n\nMake questions appropriate for '+grade+', '+depth+' level.',
 
-Use clear headings, bullet points, and engaging language appropriate for ${grade} students.`,
+    summary: 'Create a concise quick-reference cheat sheet.\n'+ctx+'\n\n📌 TOPIC IN ONE PARAGRAPH\n[2-3 sentence overview]\n\n🔑 KEY TERMS (10 terms)\n• Term: definition\n[list all 10]\n\n⚡ MUST-KNOW FACTS (10 bullet points)\n[list the 10 most important facts]\n\n📊 FORMULAS / RULES (if applicable)\n[list any formulas, rules, or frameworks]\n\n💡 MEMORY TRICKS\n[2-3 mnemonics or tips to remember key concepts]\n\n❓ LIKELY EXAM QUESTIONS (5 questions)\n[questions a teacher would put on a test]\n\n🔗 CONNECTS TO\n[2-3 related topics this lesson connects to]\n\nKeep it tight — this is a cheat sheet for '+grade+' students.',
 
-    slides: `Create a complete slide deck outline for a classroom presentation.
-${base}
+    script: 'Write a complete video lecture script (5-6 minutes) for an AI tutor.\n'+ctx+'\n\n[HOOK - 30 seconds]\nStart with a surprising fact or question to grab attention.\n\n[INTRODUCTION - 30 seconds]\nTell students what they will learn today and why it matters.\n\n[MAIN CONTENT - 3.5 minutes]\nSection 1: [First key concept]\nExplain clearly, use an analogy, give an example.\n[PAUSE - let students think]\n\nSection 2: [Second key concept]\nBuild on the first concept. Show connection.\n\nSection 3: [Third key concept]\nReal-world application. Why does this matter?\n[SHOW DIAGRAM or VISUAL]\n\n[WORKED EXAMPLE - 1 minute]\nWalk through 1-2 concrete examples step by step.\n\n[RECAP - 30 seconds]\n3 key things to remember. Preview next lesson.\n\nWrite in a natural, '+style+' tone. Include [PAUSE], [DIAGRAM], [ASK STUDENTS] cues. Designed for '+grade+'.',
 
-Format as a 12-slide presentation:
-SLIDE 1: Title slide (lesson title, subject, grade)
-SLIDE 2: Learning Objectives
-SLIDES 3-9: Core content slides (one concept per slide with title, 4-5 bullet points, speaker notes)
-SLIDE 10: Key Takeaways
-SLIDE 11: Practice Questions (3 questions)
-SLIDE 12: Summary & Next Steps
-
-For each slide include:
-- TITLE: [slide title]
-- CONTENT: [bullet points]
-- SPEAKER NOTES: [what teacher says]`,
-
-    quiz: `Create a comprehensive practice quiz.
-${base}
-
-Generate 20 questions total:
-- 10 Multiple Choice (4 options each, mark correct answer with *)
-- 5 True/False questions
-- 5 Short Answer questions
-
-Format each question clearly:
-Q1. [question text]
-A) option  B) option  C) *correct option  D) option
-
-End with a complete ANSWER KEY section.
-Make questions progressively harder (easy → medium → hard).`,
-
-    summary: `Create a quick-reference cheat sheet / study guide.
-${base}
-
-Include:
-📌 TOPIC OVERVIEW (2-3 sentences)
-🔑 KEY TERMS (10 terms with one-line definitions)
-📊 IMPORTANT FORMULAS/RULES (if applicable)
-⚡ FAST FACTS (10 bullet points — must-know facts)
-🔗 CONNECTIONS (how this connects to other topics)
-💡 MEMORY TRICKS (mnemonics or tips to remember key points)
-❓ LIKELY EXAM QUESTIONS (5 common exam questions)
-
-Keep it concise — this should fit on 1-2 pages.`,
-
-    script: `Write a complete video lecture script for an AI tutor to present.
-${base}
-
-Structure:
-[INTRO - 30 seconds]
-Hook: Start with an interesting question or surprising fact
-Introduce the topic and what students will learn
-
-[MAIN CONTENT - 4 minutes]
-Section 1: [first concept] — explain clearly with analogy
-Section 2: [second concept] — build on previous
-Section 3: [third concept] — real world application
-
-[EXAMPLES - 1 minute]
-Walk through 2 concrete examples step by step
-
-[RECAP - 30 seconds]
-Summarize 3 key takeaways
-Preview what's coming next
-
-Write in conversational, engaging language. Include [PAUSE], [SHOW DIAGRAM], [ASK STUDENTS] cues.`,
-
-    worksheet: `Create a student practice worksheet.
-${base}
-
-Section A: WARM UP (5 simple questions)
-Section B: CORE PRACTICE (8 medium difficulty problems)
-Section C: CHALLENGE (3 harder problems)
-Section D: REFLECTION
-  - What was the most important thing you learned?
-  - What questions do you still have?
-  - Rate your confidence: ⭐⭐⭐⭐⭐
-
-Include clear instructions for each section.
-Leave space indicators like [ANSWER HERE] or _________
-End with a TEACHER NOTES section with the answer key.`
+    worksheet: 'Create a student practice worksheet.\n'+ctx+'\n\nName: _________________ Date: _______ Grade: _____\n\nLesson: '+lesson+'\n\n=== SECTION A: WARM UP (5 questions) ===\nSimple recall questions.\n1. _______________\n2. _______________\n[Continue 3-5]\n\n=== SECTION B: CORE PRACTICE (8 questions) ===\nMedium difficulty. Mix of formats.\n6. _______________\n[Continue 7-13]\n\n=== SECTION C: CHALLENGE (3 questions) ===\nHigher-order thinking and application.\n14. _______________\n[Continue 15-16]\n\n=== SECTION D: REFLECTION ===\nWhat was the most important thing you learned today?\n_________________________________________________\n\nWhat question do you still have?\n_________________________________________________\n\n=== TEACHER ANSWER KEY ===\n[Provide complete answers for all sections]\n\nDesigned for '+grade+', '+depth+' level.'
   };
 
-  return prompts[type];
+  return prompts[type] || 'Write educational content about '+lesson+' for '+grade+' students.';
 }
 
-// ── GENERATE CONTENT ──────────────────────────────────────────────────────────
-window.generateContent = async function(type) {
-  if (!currentLesson) { toast('Select a lesson first','err'); return; }
+// ── GENERATE ONE ──────────────────────────────────────────────────────────────
+function generateOne(type) {
+  if (!curLesson) { toast('Please select a lesson first from the sidebar','err'); return; }
 
-  const btn = document.getElementById('gen-'+type);
-  btn.disabled = true;
-  btn.innerHTML = `<span class="spin">⏳</span> Generating...`;
+  var key    = genKey(type);
+  var card   = document.getElementById('cc-'+type);
+  var genBtn = document.getElementById('genbtn-'+type);
 
-  const key = genKey(type);
-  document.getElementById(`cs-${type}`).className = 'ctab-status running';
-  addLog('info', `Generating ${type} for: ${currentLesson.name}...`);
+  // Update UI to generating state
+  if (card) card.className = 'ccard generating';
+  if (genBtn) { genBtn.disabled = true; genBtn.textContent = '⏳'; }
 
-  try {
-    const prompt  = buildPrompt(type);
-    const content = await callClaude(prompt);
+  // Update status badge
+  var statusEl = card ? card.querySelector('.ccard-status') : null;
+  if (statusEl) { statusEl.className = 'ccard-status cs-generating'; statusEl.textContent = 'Generating...'; }
+
+  log('info', 'Generating '+type+' for: '+curLesson.name+'...');
+
+  var prompt = buildPrompt(type);
+  callClaude(prompt, function(err, content) {
+    if (err) {
+      if (card) card.className = 'ccard';
+      if (genBtn) { genBtn.disabled=false; genBtn.textContent='✨'; }
+      log('err', '❌ Failed: '+err.message);
+      toast('Generation failed: '+err.message,'err');
+      return;
+    }
+
     generated[key] = content;
-
-    showGenerated(type, content, false);
-    updateTabStatus(type);
+    addJob(type, 'generated', null);
     updateStats();
+    renderCards();
+    log('ok', '✅ '+type+' generated ('+content.length+' chars)');
+    toast(type+' generated! Click ☁️ to upload.','ok');
+  });
+}
 
-    // Add to jobs
-    addJob(type, content, 'generated');
-    addLog('ok', `✅ ${type} generated (${content.length} chars)`);
-    toast(`${type} generated successfully!`, 'ok');
-  } catch(e) {
-    addLog('err', `❌ Failed to generate ${type}: ${e.message}`);
-    toast('Generation failed: '+e.message, 'err');
-    document.getElementById(`cs-${type}`).className = 'ctab-status';
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = `✨ Regenerate ${type.charAt(0).toUpperCase()+type.slice(1)}`;
+// ── UPLOAD ONE ────────────────────────────────────────────────────────────────
+function uploadOne(type) {
+  if (!fbReady) {
+    toast('Firebase not connected. Set up Firebase first.','err');
+    window.open('firebase-setup.html','_blank');
+    return;
   }
-};
+  var key = genKey(type);
+  if (!generated[key]) { toast('Generate '+type+' first','err'); return; }
+  if (uploaded[key])   { toast(type+' already uploaded!','ok'); return; }
 
-window.generateAllTypes = async function() {
-  if (!currentLesson) { toast('Select a lesson first','err'); return; }
-  const btn = document.getElementById('btnGenAll');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spin">⏳</span> Generating all...';
+  log('info', 'Uploading '+type+' to Firebase...');
 
-  showProgress(true, `Generating all content for: ${currentLesson.name}`, '');
+  var content  = generated[key];
+  var grade    = document.getElementById('cfgGrade').value;
+  var filename = curSubject.id+'_'+curLesson.name.replace(/\s+/g,'_').replace(/[^a-zA-Z0-9_]/g,'')+'_'+type+'.txt';
+  var path     = 'materials/'+curSubject.id+'/'+Date.now()+'_'+filename;
+  var storageRef = FB_STORE.ref(path);
 
-  for (let i=0; i<CONTENT_TYPES.length; i++) {
-    const type = CONTENT_TYPES[i];
-    updateProgress(i, CONTENT_TYPES.length, `Generating ${type}...`);
-    await generateContent(type);
-    await new Promise(r=>setTimeout(r,600));
-  }
-
-  showProgress(false);
-  btn.disabled = false;
-  btn.innerHTML = '✨ Generate All';
-  toast('All content generated! Ready to upload.','ok');
-};
-
-// ── UPLOAD TO FIREBASE ────────────────────────────────────────────────────────
-window.uploadContent = async function(type) {
-  if (!fbReady) { toast('Firebase not connected. Go to Configure tab.','err'); return; }
-  const key = genKey(type);
-  if (!generated[key]) { toast('Generate content first','err'); return; }
-
-  addLog('info', `Uploading ${type} to Firebase...`);
-
-  try {
-    const content  = generated[key];
-    const filename = `${currentSubject.id}_${currentLesson.name.replace(/\s+/g,'_')}_${type}.txt`;
-    const path     = `materials/${currentSubject.id}/${filename}`;
-    const storageRef = ref(STORE, path);
-
-    await uploadString(storageRef, content, 'raw');
-    const url = await getDownloadURL(storageRef);
-
-    // Save to Firestore
-    const docRef = await addDoc(collection(DB,'materials'), {
-      title:       `${currentLesson.name} — ${typeLabel(type)}`,
-      course:      currentSubject.name,
-      grade:       getGradeLabel(),
-      subject:     currentSubject.name,
+  storageRef.putString(content).then(function(snap) {
+    return snap.ref.getDownloadURL();
+  }).then(function(url) {
+    return FB_DB.collection('materials').add({
+      title:       curLesson.name+' — '+typeLabel(type),
+      course:      curSubject.name,
+      grade:       grade,
+      subject:     curSubject.name,
       access:      'all',
       type:        typeToFileType(type),
-      filename,
+      filename:    filename,
       filePath:    path,
       downloadURL: url,
-      desc:        `AI-generated ${typeLabel(type)} for ${currentLesson.name}`,
+      desc:        'AI-generated '+typeLabel(type)+' for '+curLesson.name,
       uploadedAt:  new Date().toISOString(),
       views:       0,
       downloads:   0,
-      aiGenerated: true,
-      lessonId:    `${currentSubject.id}_${currentLesson.idx}`,
+      aiGenerated: true
+    }).then(function(docRef) {
+      return { url: url, docId: docRef.id };
     });
+  }).then(function(result) {
+    uploaded[key] = result;
+    addJob(type, 'uploaded', result.url);
+    updateStats();
+    renderCards();
 
-    uploaded[key] = { url, docId: docRef.id };
-    showGenerated(type, generated[key], true);
-    updateTabStatus(type);
-    updateJobStatus(key, 'uploaded', url);
-    updateLessonDone();
-    addLog('ok', `✅ ${type} uploaded → ${url.substring(0,50)}...`);
-    toast(`${type} uploaded to Firebase!`,'ok');
-  } catch(e) {
-    addLog('err', `❌ Upload failed: ${e.message}`);
-    toast('Upload failed: '+e.message,'err');
-  }
-};
-
-window.uploadAllGenerated = async function() {
-  if (!fbReady) { toast('Firebase not connected','err'); return; }
-  const btn = document.getElementById('btnUploadAll');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spin">⏳</span> Uploading...';
-
-  let count = 0;
-  for (const type of CONTENT_TYPES) {
-    const key = genKey(type);
-    if (generated[key] && !uploaded[key]) {
-      await uploadContent(type);
-      count++;
-      await new Promise(r=>setTimeout(r,400));
+    // Mark lesson done if all uploaded
+    var allUp = TYPES.every(function(t){ return !!uploaded[genKey(t.id)]; });
+    if (allUp) {
+      var tlEl = document.getElementById('tl-'+curSubject.id+'-'+curLesson.idx);
+      if (tlEl) tlEl.classList.add('done');
     }
-  }
 
-  btn.disabled = false;
-  btn.innerHTML = '☁️ Upload All to Firebase';
-  toast(`${count} file(s) uploaded to Firebase!`,'ok');
-  updateStats();
-};
+    log('ok', '✅ '+type+' uploaded to Firebase!');
+    toast(type+' uploaded to Firebase!','ok');
+  }).catch(function(e) {
+    log('err', '❌ Upload failed: '+e.message);
+    toast('Upload failed: '+e.message,'err');
+  });
+}
+
+// ── GENERATE ALL ──────────────────────────────────────────────────────────────
+function generateAll() {
+  if (!curLesson) { toast('Select a lesson first','err'); return; }
+  var idx = 0;
+  function next() {
+    if (idx >= TYPES.length) { toast('All content generated!','ok'); return; }
+    var type = TYPES[idx].id;
+    idx++;
+    var key = genKey(type);
+    if (generated[key]) { next(); return; } // skip already generated
+    generateOne(type);
+    // Wait then do next
+    setTimeout(next, 4000);
+  }
+  next();
+}
+
+// ── UPLOAD ALL ────────────────────────────────────────────────────────────────
+function uploadAll() {
+  if (!fbReady) { toast('Firebase not connected','err'); return; }
+  if (!curLesson) { toast('Select a lesson first','err'); return; }
+  var idx = 0;
+  function next() {
+    if (idx >= TYPES.length) { toast('All files uploaded to Firebase!','ok'); updateStats(); return; }
+    var type = TYPES[idx].id;
+    idx++;
+    var key = genKey(type);
+    if (!generated[key] || uploaded[key]) { next(); return; }
+    uploadOne(type);
+    setTimeout(next, 1500);
+  }
+  next();
+}
 
 // ── FULL PIPELINE ─────────────────────────────────────────────────────────────
-window.runFullPipeline = async function() {
-  if (!currentLesson) { toast('Select a lesson from the sidebar first','err'); return; }
-  const btn = document.getElementById('runAllBtn');
-  btn.disabled = true;
-  btn.className = 'sb-run-btn running';
-  btn.innerHTML = '<span class="spin">⏳</span> Running...';
+function runPipeline() {
+  if (!curLesson) { toast('Select a lesson from the sidebar first','err'); return; }
 
-  showProgress(true, 'Full Pipeline Running', 'Generate → Upload to Firebase');
+  var total = TYPES.length * 2;
+  var done  = 0;
 
-  // Generate all
-  for (let i=0; i<CONTENT_TYPES.length; i++) {
-    const type = CONTENT_TYPES[i];
-    updateProgress(i, CONTENT_TYPES.length*2, `Generating ${type}...`);
-    await generateContent(type);
-    await new Promise(r=>setTimeout(r,500));
+  document.getElementById('pBar').classList.add('show');
+
+  function setProgress(label, pct) {
+    document.getElementById('pLabel').textContent = label;
+    document.getElementById('pFill').style.width  = pct+'%';
+    document.getElementById('pPct').textContent   = pct+'%';
   }
 
-  // Upload all
-  for (let i=0; i<CONTENT_TYPES.length; i++) {
-    const type = CONTENT_TYPES[i];
-    updateProgress(CONTENT_TYPES.length+i, CONTENT_TYPES.length*2, `Uploading ${type} to Firebase...`);
-    await uploadContent(type);
-    await new Promise(r=>setTimeout(r,400));
+  var genIdx = 0;
+  function genNext() {
+    if (genIdx >= TYPES.length) {
+      // Start uploading
+      if (!fbReady) {
+        setProgress('Generation complete! (Firebase not connected — upload skipped)', 100);
+        setTimeout(function(){ document.getElementById('pBar').classList.remove('show'); }, 3000);
+        toast('All content generated! Connect Firebase to upload.','ok');
+        return;
+      }
+      upIdx = 0;
+      upNext();
+      return;
+    }
+    var type = TYPES[genIdx].id;
+    genIdx++;
+    done++;
+    var pct = Math.round((done/total)*100);
+    setProgress('Generating '+type+'... ('+done+'/'+total+')', pct);
+
+    var key = genKey(type);
+    if (generated[key]) { setTimeout(genNext, 200); return; }
+
+    var prompt = buildPrompt(type);
+    callClaude(prompt, function(err, content) {
+      if (!err && content) {
+        generated[key] = content;
+        addJob(type, 'generated', null);
+        renderCards();
+        updateStats();
+        log('ok','✅ Generated: '+type);
+      } else if (err) {
+        log('err','❌ '+type+': '+err.message);
+      }
+      setTimeout(genNext, 600);
+    });
   }
 
-  showProgress(false);
-  btn.disabled = false;
-  btn.className = 'sb-run-btn';
-  btn.innerHTML = '▶ Run Full Pipeline';
-  toast('🎉 Pipeline complete! All content generated & uploaded!','ok');
-  updateStats();
-};
+  var upIdx = 0;
+  function upNext() {
+    if (upIdx >= TYPES.length) {
+      setProgress('Pipeline complete! All content generated and uploaded 🎉', 100);
+      setTimeout(function(){ document.getElementById('pBar').classList.remove('show'); }, 3000);
+      toast('Pipeline complete! Check student portal to see new materials.','ok');
+      return;
+    }
+    var type = TYPES[upIdx].id;
+    upIdx++;
+    done++;
+    var pct = Math.round((done/total)*100);
+    setProgress('Uploading '+type+' to Firebase... ('+done+'/'+total+')', pct);
 
-// ── UI HELPERS ────────────────────────────────────────────────────────────────
-function showGenerated(type, content, isUploaded) {
-  const uploadedClass = isUploaded ? 'uploaded' : 'upload';
-  const uploadedIcon  = isUploaded ? '✅' : '☁️';
-  const uploadedTitle = isUploaded ? 'Uploaded to Firebase' : 'Upload to Firebase';
+    var key = genKey(type);
+    if (!generated[key] || uploaded[key]) { setTimeout(upNext, 200); return; }
 
-  document.getElementById('out-'+type).innerHTML = `
-    <div class="gen-card">
-      <div class="gen-card-head">
-        <div class="gen-card-title">
-          <span class="type-icon ti-${type}">
-            ${{notes:'📝',slides:'📊',quiz:'❓',summary:'📋',script:'🎬',worksheet:'📄'}[type]}
-          </span>
-          ${typeLabel(type)} — ${currentLesson.name}
-        </div>
-        <div class="gen-card-actions">
-          <div class="icon-btn" title="Copy to clipboard" onclick="copyContent('${type}')">📋</div>
-          <div class="icon-btn ${uploadedClass}" title="${uploadedTitle}" onclick="uploadContent('${type}')">${uploadedIcon}</div>
-        </div>
-      </div>
-      <div class="gen-card-body prose" id="body-${type}">${escHTML(content)}</div>
-    </div>`;
+    var content   = generated[key];
+    var grade     = document.getElementById('cfgGrade').value;
+    var filename  = curSubject.id+'_'+curLesson.name.replace(/\s+/g,'_').replace(/[^a-zA-Z0-9_]/g,'')+'_'+type+'.txt';
+    var path      = 'materials/'+curSubject.id+'/'+Date.now()+'_'+filename;
+
+    FB_STORE.ref(path).putString(content).then(function(snap){
+      return snap.ref.getDownloadURL();
+    }).then(function(url){
+      return FB_DB.collection('materials').add({
+        title: curLesson.name+' — '+typeLabel(type),
+        course: curSubject.name, grade: grade, subject: curSubject.name,
+        access:'all', type: typeToFileType(type), filename, filePath:path,
+        downloadURL:url, desc:'AI-generated '+typeLabel(type)+' for '+curLesson.name,
+        uploadedAt:new Date().toISOString(), views:0, downloads:0, aiGenerated:true
+      }).then(function(ref){ return {url,docId:ref.id}; });
+    }).then(function(r){
+      uploaded[key]=r;
+      addJob(type,'uploaded',r.url);
+      renderCards(); updateStats();
+      log('ok','✅ Uploaded: '+type);
+      setTimeout(upNext, 500);
+    }).catch(function(e){
+      log('err','❌ Upload '+type+': '+e.message);
+      setTimeout(upNext, 500);
+    });
+  }
+
+  genNext();
 }
 
-function clearPanel(type) {
-  const icons = {notes:'📝',slides:'📊',quiz:'❓',summary:'📋',script:'🎬',worksheet:'📄'};
-  const labels = {notes:'Notes',slides:'Slides',quiz:'Quiz',summary:'Summary',script:'Video Script',worksheet:'Worksheet'};
-  document.getElementById('out-'+type).innerHTML = `
-    <div class="empty-gen">
-      <div class="empty-gen-icon">${icons[type]}</div>
-      <div class="empty-gen-text">Click "Generate ${labels[type]}" to create AI content</div>
-    </div>`;
-}
-
-window.copyContent = function(type) {
-  const key = genKey(type);
+// ── COPY ─────────────────────────────────────────────────────────────────────
+function copyOne(type) {
+  var key = genKey(type);
   if (!generated[key]) return;
-  navigator.clipboard.writeText(generated[key]);
-  toast('Copied to clipboard!','ok');
-};
-
-window.switchCTab = function(type, el) {
-  document.querySelectorAll('.ctab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.cpanel').forEach(p => p.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('cp-'+type).classList.add('active');
-  activeCTab = type;
-};
-
-function updateTabStatus(type) {
-  const key = genKey(type);
-  const el  = document.getElementById('cs-'+type);
-  if (!el) return;
-  if (uploaded[key])   { el.className='ctab-status done'; }
-  else if (generated[key]) { el.className='ctab-status done'; el.style.background='#4f6ef7'; }
-  else { el.className='ctab-status'; }
-}
-
-function updateLessonDone() {
-  const allUploaded = CONTENT_TYPES.every(t => uploaded[genKey(t)]);
-  if (allUploaded && currentSubject && currentLesson) {
-    const el = document.getElementById(`tl-${currentSubject.id}-${currentLesson.idx}`);
-    if (el) el.classList.add('done');
-  }
+  navigator.clipboard.writeText(generated[key]).then(function(){
+    toast('Copied to clipboard!','ok');
+  });
 }
 
 // ── JOBS ──────────────────────────────────────────────────────────────────────
-function addJob(type, content, status) {
-  const key = genKey(type);
-  const existing = jobs.findIndex(j=>j.key===key);
-  const job = {
-    key, type, status,
-    subject: currentSubject.name,
-    lesson:  currentLesson.name,
-    grade:   getGradeLabel(),
-    chars:   content.length,
-    time:    new Date().toLocaleTimeString(),
-    url:     null
+function addJob(type, status, url) {
+  var key = genKey(type);
+  var existing = -1;
+  jobs.forEach(function(j,i){ if(j.key===key) existing=i; });
+  var job = {
+    key:key, type:type, status:status, url:url,
+    subject: curSubject.name, lesson: curLesson.name,
+    grade: document.getElementById('cfgGrade').value,
+    time: new Date().toLocaleTimeString()
   };
   if (existing>-1) jobs[existing]=job; else jobs.push(job);
   renderJobs();
 }
 
-function updateJobStatus(key, status, url) {
-  const j = jobs.find(j=>j.key===key);
-  if (j) { j.status=status; j.url=url; renderJobs(); }
-}
-
 function renderJobs() {
-  const tbody = document.getElementById('jobsBody');
+  var tbody = document.getElementById('jobsBody');
   if (!jobs.length) {
-    tbody.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:2rem;font-size:.85rem">No content generated yet</td></tr>';
+    tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:2.5rem;font-size:.85rem">No jobs yet</td></tr>';
     return;
   }
-  tbody.innerHTML = jobs.slice().reverse().map(j => `
-    <tr>
-      <td style="color:#fff;font-weight:500">${j.subject}</td>
-      <td style="color:var(--text)">${j.lesson}</td>
-      <td><span style="font-size:.75rem">${typeLabel(j.type)}</span></td>
-      <td style="color:var(--muted);font-size:.75rem">${j.grade}</td>
-      <td><span class="status-pill sp-${j.status}">${j.status}</span></td>
-      <td>${j.url?`<a href="${j.url}" target="_blank" style="color:var(--electric);font-size:.75rem">View ↗</a>`:'<span style="color:var(--muted);font-size:.75rem">—</span>'}</td>
-      <td>${j.url?`<button class="btn-sm btn-outline" style="font-size:.7rem" onclick="navigator.clipboard.writeText('${j.url}');toast('URL copied!','ok')">📋</button>`:''}
-      </td>
-    </tr>`).join('');
-}
-
-// ── PROGRESS ──────────────────────────────────────────────────────────────────
-function showProgress(show, label='', sub='') {
-  const el = document.getElementById('pipelineProgress');
-  el.classList.toggle('visible', show);
-  if (show) {
-    document.getElementById('progressLabel').textContent = label;
-    document.getElementById('progressSub').textContent   = sub;
-  }
-}
-
-function updateProgress(done, total, label) {
-  const pct    = Math.round((done/total)*100);
-  const offset = 113 - (113 * pct/100);
-  document.getElementById('progressRingFill').style.strokeDashoffset = offset;
-  document.getElementById('progressLabel').textContent = label;
-  document.getElementById('progressSub').textContent   = `${done}/${total} complete (${pct}%)`;
-}
-
-// ── LOG ───────────────────────────────────────────────────────────────────────
-function addLog(type, msg) {
-  const log = document.getElementById('uploadLog');
-  log.classList.add('visible');
-  const t = new Date().toLocaleTimeString();
-  const line = document.createElement('div');
-  line.className = 'log-line';
-  line.innerHTML = `<span class="log-time">${t}</span><span class="log-msg ${type}">${msg}</span>`;
-  log.appendChild(line);
-  log.scrollTop = log.scrollHeight;
+  var colors={generated:'#818cf8',uploaded:'#22c55e',pending:'#8a8aaa'};
+  tbody.innerHTML = jobs.slice().reverse().map(function(j){
+    return '<tr>'
+      +'<td style="color:#fff;font-weight:500">'+j.subject+'</td>'
+      +'<td>'+j.lesson+'</td>'
+      +'<td>'+typeLabel(j.type)+'</td>'
+      +'<td style="color:var(--muted);font-size:.72rem">'+j.grade+'</td>'
+      +'<td><span style="font-size:.65rem;font-weight:700;padding:.14rem .45rem;border-radius:4px;background:rgba(255,255,255,.06);color:'+colors[j.status]+'">'+j.status.toUpperCase()+'</span></td>'
+      +'<td>'+(j.url?'<a href="'+j.url+'" target="_blank" style="color:var(--electric);font-size:.75rem">View ↗</a>':'<span style="color:var(--muted);font-size:.75rem">—</span>')+'</td>'
+      +'</tr>';
+  }).join('');
 }
 
 // ── STATS ─────────────────────────────────────────────────────────────────────
 function updateStats() {
-  const totalLessons = CURRICULUM.reduce((a,s)=>a+s.lessons.length,0);
-  const genCount     = Object.keys(generated).length;
-  const upCount      = Object.keys(uploaded).length;
-  document.getElementById('statLessons').textContent   = totalLessons;
-  document.getElementById('statGenerated').textContent = genCount;
-  document.getElementById('statUploaded').textContent  = upCount;
-  document.getElementById('statFiles').textContent     = upCount;
+  document.getElementById('sGen').textContent = Object.keys(generated).length;
+  document.getElementById('sUp').textContent  = Object.keys(uploaded).length;
 }
 
-// ── TAB SWITCHING ─────────────────────────────────────────────────────────────
-window.showTab = function(tab) {
-  document.getElementById('tab-workspace').style.display = tab==='workspace'?'block':'none';
-  document.getElementById('tab-jobs').style.display      = tab==='jobs'?'block':'none';
-  document.getElementById('tab-config').style.display    = tab==='config'?'block':'none';
-};
+// ── LOG ───────────────────────────────────────────────────────────────────────
+function log(type, msg) {
+  var box = document.getElementById('logBox');
+  box.classList.add('show');
+  var t   = new Date().toLocaleTimeString();
+  var el  = document.createElement('div');
+  el.className = 'log-line';
+  el.innerHTML = '<span class="log-t">'+t+'</span><span class="log-m '+type+'">'+msg+'</span>';
+  document.getElementById('logLines').appendChild(el);
+  box.scrollTop = box.scrollHeight;
+}
+
+function clearLog() {
+  document.getElementById('logLines').innerHTML = '';
+  document.getElementById('logBox').classList.remove('show');
+}
+
+// ── VIEW SWITCHING ────────────────────────────────────────────────────────────
+function showView(v) {
+  document.getElementById('view-main').style.display = v==='main'?'block':'none';
+  document.getElementById('view-jobs').style.display = v==='jobs'?'block':'none';
+}
 
 // ── HELPERS ───────────────────────────────────────────────────────────────────
 function typeLabel(t) {
-  return {notes:'Study Notes',slides:'Slide Deck',quiz:'Practice Quiz',summary:'Quick Summary',script:'Video Script',worksheet:'Worksheet'}[t]||t;
+  var m={notes:'Study Notes',slides:'Slide Deck',quiz:'Practice Quiz',summary:'Quick Summary',script:'Video Script',worksheet:'Worksheet'};
+  return m[t]||t;
 }
-
 function typeToFileType(t) {
-  return {notes:'notes',slides:'ppt',quiz:'pdf',summary:'pdf',script:'notes',worksheet:'pdf'}[t]||'other';
+  var m={notes:'notes',slides:'ppt',quiz:'pdf',summary:'pdf',script:'notes',worksheet:'pdf'};
+  return m[t]||'other';
 }
-
 function escHTML(s) {
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
 }
 
-let tt;
-window.toast = function(msg,type='') {
-  const el=document.getElementById('toast');
-  el.textContent=msg; el.className=`toast ${type} show`;
-  clearTimeout(tt); tt=setTimeout(()=>el.classList.remove('show'),3800);
-};
+var toastTimer;
+function toast(msg, type) {
+  var el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className   = 'toast '+(type||'')+' show';
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ el.classList.remove('show'); }, 4000);
+}
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
 renderTree();
-initFB();
-updateStats();
+initFirebase();
 
-// Open first subject by default
-document.querySelector('.tree-subject-header').click();
+// Open Math by default
+document.getElementById('ts-math').classList.add('open');
 </script>
 </body>
 </html>
